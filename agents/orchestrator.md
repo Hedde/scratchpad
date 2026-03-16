@@ -215,6 +215,14 @@ Before authorizing a commit, verify:
 - [ ] New agents/skills have been added to the tables in `CLAUDE.md`
 - [ ] The output meets the user's original request
 
+## Repetition Log
+
+> Track tasks done manually more than once. When a pattern appears here twice, create a skill for it.
+> Format: `- [DATE] [TASK]: [WHAT WAS REPEATED]`
+> The `skills/insights.md` skill also scans this section.
+
+[No repetitions logged yet]
+
 ## Lessons Learned
 
 > After every task, record what worked, what didn't, and what to do differently.

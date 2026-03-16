@@ -84,6 +84,13 @@ Before declaring review complete, verify:
 - [ ] Documentation gaps have been identified
 - [ ] Documentation has been updated if needed (MANDATORY)
 
+## Repetition Log
+
+> Track tasks done manually more than once. When something appears here twice, propose a skill to the Orchestrator.
+> Format: `- [DATE] [TASK]: [WHAT WAS REPEATED]`
+
+[No repetitions logged yet]
+
 ## Lessons Learned
 
 [No lessons yet — this section will grow with use]

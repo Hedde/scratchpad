@@ -147,6 +147,7 @@ In both cases:
 - **Conflicts go to the Orchestrator** — unresolved disagreements are decided by the team lead
 - **No solo commits** — the Orchestrator authorizes all commits after final review
 - **Reports to Orchestrator** — each agent reports: what was done, decisions made, concerns raised
+- **Repetition detection** — if an agent does something manually for the 2nd time, it logs this in its Repetition Log and proposes a new skill to the Orchestrator
 
 ---
 
@@ -172,8 +173,11 @@ In both cases:
 | Security Audit | [skills/security-audit.md](skills/security-audit.md) | Reviewer | Security vulnerability assessment |
 | Coverage Check | [skills/coverage-check.md](skills/coverage-check.md) | Tester | Test coverage analysis |
 | Doc Audit | [skills/doc-audit.md](skills/doc-audit.md) | Documenter | Documentation completeness check |
+| Insights | [skills/insights.md](skills/insights.md) | Orchestrator | Periodic system tuning via `/loop` |
 
 > **To add a new skill:** Copy `skills/_template.md`, fill it in, add a row to this table.
+>
+> **Periodic tuning:** Run `/loop 30m /insights` during active development to auto-detect repetitive patterns, promote conventions, and tune agent performance.
 
 ---
 
@@ -244,6 +248,7 @@ After EVERY completed task, the following MUST happen:
 | Event | Action | Who |
 |-------|--------|-----|
 | Task completed | Update all affected docs, agents, skills | All involved agents |
+| **Repetitive task detected** | **Log in agent's Repetition Log; if 2nd occurrence → propose skill to Orchestrator** | **The detecting agent → Orchestrator** |
 | Pattern works twice | Promote to convention in CLAUDE.md + docs | Documenter |
 | Mistake found | Record in agent's lessons + update relevant docs | The agent that erred |
 | New tech introduced | Create/update agent + skills for it | Orchestrator |
@@ -251,6 +256,28 @@ After EVERY completed task, the following MUST happen:
 | `[NOT YET CONFIGURED]` encountered | Run bootstrap or ask user | Orchestrator |
 | Agent created | Add to CLAUDE.md agent table | Orchestrator |
 | Skill created | Add to CLAUDE.md skill table | Orchestrator |
+| **`/insights` runs** | **Harvest lessons, detect repetition, promote conventions, tune agents** | **Orchestrator** |
+
+### Periodic Tuning
+
+Run `skills/insights.md` periodically to keep the system sharp:
+
+```bash
+# During active development (recommended)
+/loop 30m /insights
+
+# During maintenance
+/loop 2h /insights
+
+# After a sprint or release (thorough one-time run)
+/insights
+```
+
+The insights skill scans all agent Repetition Logs, Lessons Learned, and Skill Improvement Logs to:
+- Auto-create skills for detected repetitive patterns
+- Promote confirmed patterns to conventions
+- Tune agent configurations
+- Flag documentation gaps
 
 ### Quality Gates
 

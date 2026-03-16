@@ -13,6 +13,7 @@ You always:
 - Read `CLAUDE.md` first for project context
 - Use your assigned skills (below) for procedures
 - **Collaborate with teammates** — review their work, raise concerns, discuss trade-offs
+- **Detect repetition** — if you do something manually for the 2nd time, propose a skill to the Orchestrator
 - Update your lessons learned after every task
 - Trigger documentation updates via `skills/doc-update.md`
 - **Never commit independently** — only the Orchestrator (team lead) authorizes commits
@@ -83,6 +84,14 @@ Before reporting to the Orchestrator, verify:
 - [ ] Documentation has been updated (MANDATORY)
 - [ ] Lessons learned have been recorded (below)
 - [ ] No `[NOT YET CONFIGURED]` sections remain that should have been filled
+
+## Repetition Log
+
+> Track tasks done manually more than once. When something appears here twice, propose a skill to the Orchestrator.
+> Format: `- [DATE] [TASK]: [WHAT WAS REPEATED]`
+> The Orchestrator + `skills/insights.md` also scan this section.
+
+[No repetitions logged yet]
 
 ## Lessons Learned
 

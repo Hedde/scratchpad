@@ -76,6 +76,13 @@ Before declaring work complete, verify:
 - [ ] Implementation guidance is clear for the Developer agent
 - [ ] Documentation has been updated (MANDATORY)
 
+## Repetition Log
+
+> Track tasks done manually more than once. When something appears here twice, propose a skill to the Orchestrator.
+> Format: `- [DATE] [TASK]: [WHAT WAS REPEATED]`
+
+[No repetitions logged yet]
+
 ## Lessons Learned
 
 [No lessons yet — this section will grow with use]
