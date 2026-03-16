@@ -263,15 +263,18 @@ After EVERY completed task, the following MUST happen:
 Run `skills/insights.md` periodically to keep the system sharp:
 
 ```bash
-# During active development (recommended)
-/loop 30m /insights
+# During active development (~2-3x per workday)
+/loop 4h /insights
 
-# During maintenance
-/loop 2h /insights
+# During maintenance (once a day)
+/loop 8h /insights
 
 # After a sprint or release (thorough one-time run)
 /insights
 ```
+
+> Insights needs accumulated data — don't run it too often. A few completed tasks
+> need to have happened for patterns to emerge.
 
 The insights skill scans all agent Repetition Logs, Lessons Learned, and Skill Improvement Logs to:
 - Auto-create skills for detected repetitive patterns

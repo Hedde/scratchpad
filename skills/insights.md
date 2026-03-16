@@ -148,15 +148,19 @@ Don't just report — fix what you can:
 ## Recommended `/loop` Configuration
 
 ```bash
-# During active development (recommended)
-/loop 30m /insights
+# During active development (recommended — ~2-3x per workday)
+/loop 4h /insights
 
-# During maintenance periods
-/loop 2h /insights
+# During maintenance periods (once a day is fine)
+/loop 8h /insights
 
-# After a sprint or release
-/insights  (run once, thoroughly)
+# After a sprint, release, or onboarding (one-time thorough run)
+/insights
 ```
+
+> **Why not more frequent?** Insights needs accumulated data to be useful — lessons learned,
+> repetition logs, skill improvement entries. You need several completed tasks before patterns
+> emerge. Running it too often produces empty reports and wastes context.
 
 ## Output
 
