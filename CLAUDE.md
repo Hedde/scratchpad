@@ -18,16 +18,31 @@
 
 ## Bootstrap: Auto-Discovery Protocol
 
-> This repository starts empty. Everything below guides discovery and configuration.
 > The bootstrap process is itself a skill: `skills/bootstrap-interview.md`
+> It handles BOTH existing and new projects automatically.
 
-**If any section is marked `[NOT YET CONFIGURED]`, the bootstrap interview MUST run before work begins.**
+**If any section is marked `[NOT YET CONFIGURED]`, the bootstrap MUST run before work begins.**
 
-The bootstrap skill will:
-1. Interview the user about purpose, stack, environment, conventions, deployment
-2. Immediately update this file, relevant docs, and configure agents for the chosen stack
-3. Create project-specific agents and skills based on the tech stack
-4. Never leave a section unconfigured after learning the answer
+### How Bootstrap Works
+
+The bootstrap skill **first detects** whether this is an existing or new project:
+
+**Existing project detected** (source files, package manifests, configs found):
+1. **Discover first, ask later** — scan the entire codebase for tech stack, patterns, conventions, commands
+2. **Present a discovery report** — show findings to the user: "I found X, Y, Z — is this correct?"
+3. **User confirms or corrects** — only ask questions about things that couldn't be discovered
+4. Update all docs, agents, and skills with confirmed information
+
+**New project detected** (no source code found):
+1. **Decisions first** — nothing to discover, so interview the user about all choices
+2. Ask about purpose, tech stack, environment, conventions, deployment
+3. Update all docs, agents, and skills with decided information
+
+In both cases:
+- Immediately update this file, all docs, all agents, all skills
+- Configure project-specific agent behavior and skill procedures
+- Create stack-specific agents/skills if needed
+- Never leave a section unconfigured after learning the answer
 
 ---
 
