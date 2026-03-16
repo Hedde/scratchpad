@@ -1,44 +1,48 @@
 # Documentation
 
-Living documentation that grows with the project. Claude uses these files as context when working on tasks.
+Living documentation that grows with the project. Part of a self-improving system together with `agents/` and `skills/`.
 
-## Structure
+## System Architecture
 
 ```
-docs/
-  architecture/           # System design, database patterns, infrastructure decisions
-    database.md           # DB design, connection pooling, query patterns
-  decisions/              # Architecture Decision Records (ADRs)
-    _template.md          # ADR template
-  development/            # How to build: workflow, code patterns, testing
-    code-organization.md  # Module structure, naming, separation of concerns
-    migrations.md         # Database migration conventions and safe patterns
-    testing.md            # Test strategy, types, coverage targets
-    workflow.md           # Dev environment, commands, CI, commit conventions
-  features/               # Functional documentation per feature
-    _template.md          # Feature doc template
-  getting-started/        # Onboarding
-    new-feature-checklist.md  # Step-by-step guide for adding features
-  operations/             # Deployment, monitoring, CI/CD
-    deployment.md         # Deployment process, infrastructure, troubleshooting
-    ci.md                 # CI/CD pipeline configuration
-  ui/                     # Frontend patterns
-    patterns.md           # Component architecture, styling conventions
+CLAUDE.md                     # Orchestrator trigger file — entry point for all tasks
+  │
+  ├── agents/                 # Reusable AI specialist personas
+  │   ├── orchestrator.md     # Team lead: assembles teams, coordinates, reviews final output
+  │   ├── architect.md        # System design, patterns, ADRs
+  │   ├── developer.md        # Implementation, debugging, refactoring
+  │   ├── reviewer.md         # Code review, security, quality
+  │   ├── tester.md           # Testing strategy, test writing, coverage
+  │   └── documenter.md       # Documentation maintenance (mandatory after all tasks)
+  │
+  ├── skills/                 # Composable procedures used by agents
+  │   ├── bootstrap-interview.md, implement.md, code-review.md, ...
+  │   └── doc-update.md       # MANDATORY post-task skill — used by ALL agents
+  │
+  └── docs/                   # Project knowledge base (this folder)
+      ├── architecture/       # System design, database patterns
+      ├── decisions/          # Architecture Decision Records (ADRs)
+      ├── development/        # Workflow, code patterns, testing, migrations
+      ├── features/           # Functional documentation per feature
+      ├── getting-started/    # Onboarding, checklists
+      ├── operations/         # Deployment, CI/CD
+      └── ui/                 # Frontend patterns
 ```
 
 ## How Documentation Evolves
 
-This documentation system is designed to **learn and improve** over time:
+Documentation updates are **MANDATORY after every task**. This is enforced by:
 
-1. **Templates** (`_template.md`) provide starting structure for new entries
-2. **Docs are updated** as patterns are discovered, refined, or deprecated
-3. **CLAUDE.md** always points to the right doc for the right task
-4. **Feature docs** are created for every non-trivial feature before implementation
-5. **Decision records** capture the "why" behind architectural choices
+1. Every agent triggers `skills/doc-update.md` as its final step
+2. The Documenter agent exists solely to ensure documentation stays current
+3. `CLAUDE.md` explicitly requires documentation updates as non-negotiable
+4. Agent `Lessons Learned` sections grow with every task
+5. Skill `Improvement Log` sections grow with every use
 
 ## Principles
 
 - **Living docs**: Update when patterns change. Delete when obsolete
 - **DRY**: Detail lives here. CLAUDE.md only holds summaries and pointers
 - **Examples first**: Show code examples, not just rules
-- **Honest**: Mark things as `[TODO]` rather than guessing. Fill in when known
+- **Honest**: Mark things as `[NOT YET CONFIGURED]` rather than guessing. Fill in when known
+- **Mandatory**: Documentation is not optional. It happens after every task

@@ -1,22 +1,33 @@
-# Project Blueprint
+# Project Blueprint — Orchestrator Trigger File
 
-> **This file is the AI assistant's primary context.** It triggers the right documentation for every task.
-> Keep it concise — deep knowledge lives in `docs/`. This file only holds summaries and pointers.
+> **This file is the AI assistant's command center.** It routes every task to the right agents, skills, and documentation.
+> This file is self-improving: after every completed task, update this file and relevant docs.
+> Keep it concise — deep knowledge lives in `docs/`, agents in `agents/`, skills in `skills/`.
 
-## Bootstrap: New Project Setup
+---
 
-**If any section below is marked `[NOT YET CONFIGURED]`, start by interviewing the user.**
+## CRITICAL RULES
 
-Run the bootstrap interview before writing any code:
+1. **Documentation updates are MANDATORY.** After every completed task — no exceptions — update all relevant docs, this file, and any agent/skill that was involved. This is not optional. This is not "when appropriate." This is ALWAYS.
+2. **Never leave `[NOT YET CONFIGURED]` after learning the answer.** Fill it in immediately.
+3. **Agents are reusable.** Before creating a new agent, check `agents/` for an existing one. If none fits, create one from `agents/_template.md`.
+4. **Skills are composable.** Skills can be invoked by the orchestrator or by agents. Check `skills/` before writing inline logic.
+5. **Self-improvement is continuous.** Every agent, skill, and doc improves itself after use. Record what worked, what failed, and what to do differently.
 
-1. Ask about the project's **purpose** (one-liner description)
-2. Ask about the **tech stack** (framework, language, database, styling, deployment)
-3. Ask about **development environment** (Docker, local, devcontainer, etc.)
-4. Ask about **conventions** they care about (naming, git, testing, code style)
-5. Ask about **deployment** target (cloud provider, CI/CD)
+---
 
-After each answer, immediately update the relevant `docs/` file AND this CLAUDE.md section.
-Never leave a section as `[NOT YET CONFIGURED]` after learning the answer.
+## Bootstrap: Auto-Discovery Protocol
+
+> This repository starts empty. Everything below guides discovery and configuration.
+> The bootstrap process is itself a skill: `skills/bootstrap-interview.md`
+
+**If any section is marked `[NOT YET CONFIGURED]`, the bootstrap interview MUST run before work begins.**
+
+The bootstrap skill will:
+1. Interview the user about purpose, stack, environment, conventions, deployment
+2. Immediately update this file, relevant docs, and configure agents for the chosen stack
+3. Create project-specific agents and skills based on the tech stack
+4. Never leave a section unconfigured after learning the answer
 
 ---
 
@@ -28,36 +39,24 @@ Never leave a section as `[NOT YET CONFIGURED]` after learning the answer.
 
 ## Tech Stack
 
-[NOT YET CONFIGURED] — Run bootstrap interview.
-
-Once configured, this section should list:
-- Framework & language (with versions)
-- Database
-- Styling / CSS approach
-- Key libraries
-- Deployment target
-- CI/CD
+[NOT YET CONFIGURED] — Run `skills/bootstrap-interview.md`
 
 ## Project Structure
 
-[NOT YET CONFIGURED] — Will be populated after tech stack is established.
+[NOT YET CONFIGURED] — Auto-populated after bootstrap.
 
 ```
-# This tree will be filled in as the project takes shape.
-# Update it when new top-level modules/directories are added.
+# Updated automatically as the project takes shape.
 ```
 
 ## Development
 
 [NOT YET CONFIGURED] — See [docs/development/workflow.md](docs/development/workflow.md)
 
-Once configured, list the 5-7 most common commands here as a quick reference.
-Full command reference lives in the workflow doc.
-
 ## Conventions
 
-> Conventions are discovered and refined over time. When a pattern is confirmed across 2+ interactions,
-> document it here (summary) and in the relevant `docs/` file (detail).
+> Conventions are discovered and codified. When a pattern works twice, it becomes a convention.
+> Document here (summary) and in `docs/` (detail). This is MANDATORY.
 
 ### Code Style
 [NOT YET CONFIGURED] — See [docs/development/code-organization.md](docs/development/code-organization.md)
@@ -78,11 +77,112 @@ Full command reference lives in the workflow doc.
 ### UI & Design System
 [NOT YET CONFIGURED] — See [docs/ui/patterns.md](docs/ui/patterns.md)
 
-### Documentation
-- Create `docs/features/<feature>.md` for each new feature
-- Keep CLAUDE.md and docs/ up-to-date when patterns improve or mistakes are corrected
-- Feature docs describe: purpose, user flows, technical decisions, and edge cases
-- Record architectural decisions in `docs/decisions/`
+---
+
+## Agent System
+
+> Agents are reusable specialists that work in **teams**. They review each other's work, discuss
+> trade-offs, and reach consensus. The Orchestrator is the team lead who makes the final call
+> and is the ONLY one who authorizes commits. See [agents/README.md](agents/README.md).
+>
+> **Prerequisite:** Claude must be configured in team/multi-agent mode for full team collaboration.
+> In single-agent mode, one agent assumes all roles sequentially.
+
+### How Agents Work Together
+
+1. **Orchestrator assesses the task** and selects the team
+2. **Team is briefed** — every agent receives the task + their teammates' handles
+3. **Agents work in phases** — each phase ends with a peer review checkpoint
+4. **Agents discuss and debate** — they review each other's output, raise concerns, propose alternatives
+5. **Dedicated Reviewer** reviews code quality, security, and convention adherence
+6. **Agents report to Orchestrator** — presenting work, decisions, and any unresolved concerns
+7. **Orchestrator (team lead) reviews** — the final authority on quality and correctness
+8. **Only after Orchestrator approval** — the commit happens and documentation is updated
+9. **If no agent fits** — create one from `agents/_template.md` (reusable for future tasks)
+
+### Available Agents
+
+| Agent | File | Role in Team | Skills |
+|-------|------|-------------|--------|
+| Orchestrator | [agents/orchestrator.md](agents/orchestrator.md) | **Team lead** — assembles, coordinates, final reviewer, authorizes commits | All skills |
+| Architect | [agents/architect.md](agents/architect.md) | System design, patterns, ADRs, tech decisions | `design-review`, `adr-create` |
+| Developer | [agents/developer.md](agents/developer.md) | Implementation, coding, debugging | `implement`, `debug`, `refactor` |
+| Reviewer | [agents/reviewer.md](agents/reviewer.md) | Dedicated reviewer — quality, security, conventions | `code-review`, `security-audit` |
+| Tester | [agents/tester.md](agents/tester.md) | Test strategy, test writing, coverage | `test-generate`, `coverage-check` |
+| Documenter | [agents/documenter.md](agents/documenter.md) | Documentation guardian — always invoked | `doc-update`, `doc-audit` |
+
+> **To add a new agent:** Copy `agents/_template.md`, fill it in, add a row to this table.
+
+### Team Assembly Patterns
+
+| Task Type | Team | Workflow |
+|-----------|------|----------|
+| New feature | Architect + Developer + Tester + Reviewer + Documenter | Design → Peer Review → Implement → Peer Review → Test → Review → Document → **Orchestrator Approval** → Commit |
+| Bug fix | Developer + Tester + Documenter | Debug → Fix → Peer Review → Test → Document → **Orchestrator Approval** → Commit |
+| Refactor | Architect + Developer + Reviewer + Documenter | Plan → Peer Review → Refactor → Review → Document → **Orchestrator Approval** → Commit |
+| New project setup | Orchestrator (runs bootstrap) | Interview → Configure → Verify → **Orchestrator Approval** → Commit |
+| Code review | Reviewer + Documenter | Review → Document → **Orchestrator Approval** |
+| Architecture decision | Architect + Developer + Documenter | Analyze → Team Discussion → Decide → ADR → **Orchestrator Approval** → Commit |
+
+### Collaboration Protocol
+
+- **Peer review at every checkpoint** — agents review each other's output before the next phase
+- **Discussion is encouraged** — agents debate approaches and raise concerns openly
+- **Reviewer is dedicated** — the Reviewer agent does not implement; it only reviews
+- **Conflicts go to the Orchestrator** — unresolved disagreements are decided by the team lead
+- **No solo commits** — the Orchestrator authorizes all commits after final review
+- **Reports to Orchestrator** — each agent reports: what was done, decisions made, concerns raised
+
+---
+
+## Skill System
+
+> Skills are composable procedures. They can be invoked by the orchestrator, by agents, or directly.
+> Skills are self-improving: after each use, the skill file is updated with lessons learned.
+> See [skills/README.md](skills/README.md) for the full skill catalog.
+
+### Available Skills
+
+| Skill | File | Used By | Purpose |
+|-------|------|---------|---------|
+| Bootstrap Interview | [skills/bootstrap-interview.md](skills/bootstrap-interview.md) | Orchestrator | Project setup, tech stack discovery |
+| Code Review | [skills/code-review.md](skills/code-review.md) | Reviewer | Structured code review process |
+| Design Review | [skills/design-review.md](skills/design-review.md) | Architect | Architecture & design evaluation |
+| Implementation | [skills/implement.md](skills/implement.md) | Developer | Feature implementation workflow |
+| Test Generation | [skills/test-generate.md](skills/test-generate.md) | Tester | Test creation & coverage strategy |
+| Documentation Update | [skills/doc-update.md](skills/doc-update.md) | All agents | MANDATORY post-task documentation |
+| Refactor | [skills/refactor.md](skills/refactor.md) | Developer | Safe refactoring with verification |
+| Debug | [skills/debug.md](skills/debug.md) | Developer | Systematic debugging process |
+| ADR Create | [skills/adr-create.md](skills/adr-create.md) | Architect | Architecture Decision Record creation |
+| Security Audit | [skills/security-audit.md](skills/security-audit.md) | Reviewer | Security vulnerability assessment |
+| Coverage Check | [skills/coverage-check.md](skills/coverage-check.md) | Tester | Test coverage analysis |
+| Doc Audit | [skills/doc-audit.md](skills/doc-audit.md) | Documenter | Documentation completeness check |
+
+> **To add a new skill:** Copy `skills/_template.md`, fill it in, add a row to this table.
+
+---
+
+## Documentation Map (Trigger Reference)
+
+> When working on a task, consult the relevant docs AND the relevant agents/skills.
+
+| When working on... | Consult Docs | Consult Agent | Use Skill |
+|--------------------|-------------|---------------|-----------|
+| New project setup | All docs | Orchestrator | `bootstrap-interview` |
+| New feature | [Feature Checklist](docs/getting-started/new-feature-checklist.md) | Architect → Developer → Tester | `implement`, `test-generate` |
+| Database changes | [Database](docs/architecture/database.md), [Migrations](docs/development/migrations.md) | Architect → Developer | `implement` |
+| Architecture decisions | [Decision Records](docs/decisions/) | Architect | `design-review`, `adr-create` |
+| Code structure | [Code Organization](docs/development/code-organization.md) | Developer | `implement` |
+| Writing tests | [Testing Strategy](docs/development/testing.md) | Tester | `test-generate`, `coverage-check` |
+| Code review | [Code Organization](docs/development/code-organization.md) | Reviewer | `code-review`, `security-audit` |
+| UI work | [UI Patterns](docs/ui/patterns.md) | Developer | `implement` |
+| Deployment | [Deployment](docs/operations/deployment.md) | Orchestrator | — |
+| CI/CD | [CI/CD](docs/operations/ci.md) | Orchestrator | — |
+| Bug fix | [Testing](docs/development/testing.md) | Developer → Tester | `debug`, `test-generate` |
+| Refactoring | [Code Organization](docs/development/code-organization.md) | Architect → Developer → Reviewer | `refactor`, `code-review` |
+| **After ANY task** | **All affected docs** | **Documenter** | **`doc-update` (MANDATORY)** |
+
+---
 
 ## Architecture Patterns
 
@@ -91,8 +191,8 @@ Full command reference lives in the workflow doc.
 [NOT YET CONFIGURED] — Patterns will be documented as the project evolves.
 
 See:
-- [docs/architecture/database.md](docs/architecture/database.md) — DB design & query patterns
-- [docs/architecture/](docs/architecture/) — All architecture documentation
+- [docs/architecture/database.md](docs/architecture/database.md)
+- [docs/architecture/](docs/architecture/)
 
 ## Deployment
 
@@ -104,63 +204,50 @@ See:
 
 ## Key Domain Concepts
 
-[NOT YET CONFIGURED] — Document domain-specific terminology and business rules here as they emerge.
+[NOT YET CONFIGURED] — Document domain-specific terminology and business rules as they emerge.
 
 ---
 
-## Documentation Map (Trigger Reference)
+## Self-Improvement Protocol
 
-> **How this works:** When working on a task, Claude should consult the relevant docs below.
-> Each link points to living documentation that grows with the project.
+> **This section governs how the entire system evolves.** Every agent, skill, and doc follows this.
 
-| When working on...              | Consult                                                                 |
-|---------------------------------|-------------------------------------------------------------------------|
-| New feature                     | [New Feature Checklist](docs/getting-started/new-feature-checklist.md)  |
-| Database schema / migrations    | [Database Patterns](docs/architecture/database.md)                      |
-| Architecture decisions          | [Decision Records](docs/decisions/)                                     |
-| Code structure / organization   | [Code Organization](docs/development/code-organization.md)              |
-| Writing tests                   | [Testing Strategy](docs/development/testing.md)                         |
-| Dev commands / workflow          | [Development Workflow](docs/development/workflow.md)                     |
-| UI components / styling         | [UI Patterns](docs/ui/patterns.md)                                      |
-| Deployment / infrastructure     | [Deployment](docs/operations/deployment.md)                             |
-| CI/CD pipeline                  | [CI/CD](docs/operations/ci.md)                                          |
-| Feature specs / requirements    | [Feature Docs](docs/features/)                                          |
-| Migration patterns              | [Migrations](docs/development/migrations.md)                            |
+### MANDATORY Post-Task Updates (Non-Negotiable)
 
----
+After EVERY completed task, the following MUST happen:
 
-## Self-Learning Protocol
+1. **Run `skills/doc-update.md`** — The Documenter agent (or the acting agent) updates all affected documentation.
+2. **Update this file** — If any section of CLAUDE.md was affected, update it now.
+3. **Update agent files** — Every agent involved records what it learned in its `## Lessons Learned` section.
+4. **Update skill files** — Every skill used records improvements in its `## Improvement Log` section.
+5. **Replace `[NOT YET CONFIGURED]`** — If any information was discovered, fill it in immediately.
+6. **Create feature docs** — For any new feature: `docs/features/<feature-name>.md`.
+7. **Create ADRs** — For any architectural decision: `docs/decisions/NNN-title.md`.
 
-> **This section instructs Claude on how to evolve the project documentation.**
+### Self-Improvement Triggers
 
-### When to Update Documentation
+| Event | Action | Who |
+|-------|--------|-----|
+| Task completed | Update all affected docs, agents, skills | All involved agents |
+| Pattern works twice | Promote to convention in CLAUDE.md + docs | Documenter |
+| Mistake found | Record in agent's lessons + update relevant docs | The agent that erred |
+| New tech introduced | Create/update agent + skills for it | Orchestrator |
+| User gives feedback | Update conventions, agent behavior, skill procedures | Orchestrator |
+| `[NOT YET CONFIGURED]` encountered | Run bootstrap or ask user | Orchestrator |
+| Agent created | Add to CLAUDE.md agent table | Orchestrator |
+| Skill created | Add to CLAUDE.md skill table | Orchestrator |
 
-1. **New pattern discovered** — When a coding pattern works well twice, document it in the relevant `docs/` file and add a summary line to CLAUDE.md
-2. **Mistake corrected** — When a wrong approach is identified, update the docs to prevent repetition. Add to `docs/decisions/` if it's architectural
-3. **User preference learned** — When the user expresses a preference (style, tooling, workflow), capture it in the relevant section
-4. **New feature built** — Always create `docs/features/<feature-name>.md` with purpose, flows, technical decisions, and edge cases
-5. **Convention established** — When a convention is agreed upon, add it to both CLAUDE.md (summary) and the relevant doc (detail)
-
-### How to Update
-
-- **CLAUDE.md**: Keep summaries short (1-2 lines per item). This file should stay under 200 lines of active content
-- **docs/ files**: Full detail with code examples, rationale, and edge cases
-- **Replace `[NOT YET CONFIGURED]`** markers as soon as information is available
-- **Never duplicate** — if information exists in a docs/ file, CLAUDE.md should only have a pointer
-- **Architecture decisions** go in `docs/decisions/NNN-title.md` using the ADR template
-
-### Interview Triggers
-
-Ask the user for clarification when:
-- A `[NOT YET CONFIGURED]` section is needed for the current task
-- A docs/ file is empty and relevant to the current work
-- A convention conflict is detected (code doesn't match documented patterns)
-- A new technology or pattern is being introduced that isn't documented yet
-
-### Quality Checks
+### Quality Gates
 
 Before implementing any feature, verify:
-1. Is there a feature doc in `docs/features/`? If not, create one first
+1. Is there a feature doc in `docs/features/`? **If not, create one first.**
 2. Do the architecture docs cover the patterns being used?
 3. Are test patterns documented for this type of code?
-4. Is the UI approach consistent with documented patterns?
+4. Are the right agents and skills identified for this task?
+5. Is the UI approach consistent with documented patterns?
+
+After implementing any feature, verify:
+1. **Were all docs updated?** (This is mandatory, check again.)
+2. Were agent lessons recorded?
+3. Were skill improvements logged?
+4. Does CLAUDE.md reflect the current state?
