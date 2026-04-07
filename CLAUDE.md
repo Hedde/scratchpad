@@ -8,11 +8,15 @@
 
 ## CRITICAL RULES
 
-1. **Documentation updates are MANDATORY.** After every completed task — no exceptions — update all relevant docs, this file, and any agent/skill that was involved. This is not optional. This is not "when appropriate." This is ALWAYS.
-2. **Never leave `[NOT YET CONFIGURED]` after learning the answer.** Fill it in immediately.
-3. **Agents are reusable.** Before creating a new agent, check `agents/` for an existing one. If none fits, create one from `agents/_template.md`.
-4. **Skills are composable.** Skills can be invoked by the orchestrator or by agents. Check `skills/` before writing inline logic.
-5. **Self-improvement is continuous.** Every agent, skill, and doc improves itself after use. Record what worked, what failed, and what to do differently.
+> Rules use RFC 2119 keywords: **[MUST]** = mandatory, **[SHOULD]** = recommended unless justified,
+> **[COULD]** = optional, **[MUST NOT]** = prohibited.
+
+1. **[MUST] Documentation updates after every task.** No exceptions — update all relevant docs, this file, and any agent/skill that was involved. This is not optional. This is not "when appropriate." This is ALWAYS.
+2. **[MUST] Never leave `[NOT YET CONFIGURED]` after learning the answer.** Fill it in immediately.
+3. **[MUST] Agents auto-improve on correction.** When an agent is corrected on a mistake or gotcha, it **[MUST]** update its own agent file: add to `## Gotchas` and `## Lessons Learned`. This is non-negotiable.
+4. **[SHOULD] Reuse agents.** Before creating a new agent, check `agents/` for an existing one. If none fits, create one from `agents/_template.md`.
+5. **[SHOULD] Skills over inline logic.** Skills are composable procedures. Check `skills/` before writing inline logic.
+6. **[MUST] Self-improvement is continuous.** Every agent, skill, and doc improves itself after use. Record what worked, what failed, and what to do differently.
 
 ---
 
@@ -71,7 +75,7 @@ In both cases:
 ## Conventions
 
 > Conventions are discovered and codified. When a pattern works twice, it becomes a convention.
-> Document here (summary) and in `docs/` (detail). This is MANDATORY.
+> Document here (summary) and in `docs/` (detail). This is **[MANDATORY]**.
 
 ### Code Style
 [NOT YET CONFIGURED] — See [docs/development/code-organization.md](docs/development/code-organization.md)
@@ -94,60 +98,130 @@ In both cases:
 
 ---
 
-## Agent System
+## Agent System — Named Team
 
-> Agents are reusable specialists that work in **teams**. They review each other's work, discuss
-> trade-offs, and reach consensus. The Orchestrator is the team lead who makes the final call
-> and is the ONLY one who authorizes commits. See [agents/README.md](agents/README.md).
->
-> **Prerequisite:** Claude must be configured in team/multi-agent mode for full team collaboration.
-> In single-agent mode, one agent assumes all roles sequentially.
+> Named specialist agents that work in **teams**. Role agents advise and review. Task agents
+> plan, build, fix, test, and document. The user orchestrates.
+> See [agents/README.md](agents/README.md) for full protocol and spawn examples.
 
-### How Agents Work Together
+### The Team
 
-1. **Orchestrator assesses the task** and selects the team
-2. **Team is briefed** — every agent receives the task + their teammates' handles
-3. **Agents work in phases** — each phase ends with a peer review checkpoint
-4. **Agents discuss and debate** — they review each other's output, raise concerns, propose alternatives
-5. **Dedicated Reviewer** reviews code quality, security, and convention adherence
-6. **Agents report to Orchestrator** — presenting work, decisions, and any unresolved concerns
-7. **Orchestrator (team lead) reviews** — the final authority on quality and correctness
-8. **Only after Orchestrator approval** — the commit happens and documentation is updated
-9. **If no agent fits** — create one from `agents/_template.md` (reusable for future tasks)
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ROLE AGENTS (Advisors — review, audit, recommend)          │
+│  Lisa (UX) · Mark (QA) · Daan (Perf) · Sophie (DB) · Eva   │
+├─────────────────────────────────────────────────────────────┤
+│  TASK AGENTS (Executors — plan, build, fix, test, document) │
+│  Thomas (Plan) · Rick (Dev) · Karin (Fix) · Sanne (Test)   │
+│  Niels (Docs)                                               │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ### Available Agents
 
-| Agent | File | Role in Team | Skills |
-|-------|------|-------------|--------|
-| Orchestrator | [agents/orchestrator.md](agents/orchestrator.md) | **Team lead** — assembles, coordinates, final reviewer, authorizes commits | All skills |
-| Architect | [agents/architect.md](agents/architect.md) | System design, patterns, ADRs, tech decisions | `design-review`, `adr-create` |
-| Developer | [agents/developer.md](agents/developer.md) | Implementation, coding, debugging | `implement`, `debug`, `refactor` |
-| Reviewer | [agents/reviewer.md](agents/reviewer.md) | Dedicated reviewer — quality, security, conventions | `code-review`, `security-audit` |
-| Tester | [agents/tester.md](agents/tester.md) | Test strategy, test writing, coverage | `test-generate`, `coverage-check` |
-| Documenter | [agents/documenter.md](agents/documenter.md) | Documentation guardian — always invoked | `doc-update`, `doc-audit` |
+| Name | File | Type | Focus |
+|------|------|------|-------|
+| **Lisa** | [agents/ux-designer.md](agents/ux-designer.md) | Role | UI consistency, accessibility, responsive design |
+| **Mark** | [agents/qa-lead.md](agents/qa-lead.md) | Role | Production readiness, 5 quality dimensions |
+| **Daan** | [agents/performance-engineer.md](agents/performance-engineer.md) | Role | Runtime performance at scale |
+| **Sophie** | [agents/database-specialist.md](agents/database-specialist.md) | Role | Schema, migrations, data integrity |
+| **Eva** | [agents/security-engineer.md](agents/security-engineer.md) | Role | OWASP Top 10, access control, threat modeling |
+| **Thomas** | [agents/plan.md](agents/plan.md) | Task | Implementation planning (zero code) |
+| **Rick** | [agents/feature.md](agents/feature.md) | Task | Full-stack implementation |
+| **Karin** | [agents/fix.md](agents/fix.md) | Task | Root cause analysis, bug fixes |
+| **Sanne** | [agents/test.md](agents/test.md) | Task | Test strategy, coverage improvement |
+| **Niels** | [agents/docs-sync.md](agents/docs-sync.md) | Task | Documentation sync (automatic) |
 
-> **To add a new agent:** Copy `agents/_template.md`, fill it in, add a row to this table.
+> **To add a new agent:** Copy `agents/_template.md`, give it a name and persona, add a row here.
 
 ### Team Assembly Patterns
 
 | Task Type | Team | Workflow |
 |-----------|------|----------|
-| New feature | Architect + Developer + Tester + Reviewer + Documenter | Design → Peer Review → Implement → Peer Review → Test → Review → Document → **Orchestrator Approval** → Commit |
-| Bug fix | Developer + Tester + Documenter | Debug → Fix → Peer Review → Test → Document → **Orchestrator Approval** → Commit |
-| Refactor | Architect + Developer + Reviewer + Documenter | Plan → Peer Review → Refactor → Review → Document → **Orchestrator Approval** → Commit |
-| New project setup | Orchestrator (runs bootstrap) | Interview → Configure → Verify → **Orchestrator Approval** → Commit |
-| Code review | Reviewer + Documenter | Review → Document → **Orchestrator Approval** |
-| Architecture decision | Architect + Developer + Documenter | Analyze → Team Discussion → Decide → ADR → **Orchestrator Approval** → Commit |
+| New feature | Thomas → Rick + Sanne + fan-out review (Mark, Lisa, Eva) + Niels | Plan → Build → Test → Review → Docs |
+| Bug fix | Karin + Sanne + Mark + Niels | Diagnose → Fix → Regression test → Preflight → Docs |
+| Refactor | Thomas → Rick + Mark + Niels | Plan → Refactor → Quality review → Docs |
+| Database change | Thomas → Sophie review → Rick + Daan review + Niels | Plan → Schema review → Build → Perf review → Docs |
+| Security-sensitive | Thomas → Eva threat model → Rick + Eva review + Mark + Niels | Plan → Threat model → Build → Security review → Docs |
+| UI feature | Thomas → Lisa design → Rick + Lisa review + Mark + Niels | Plan → UX design → Build → UX review → Docs |
+| Performance issue | Daan audit → Karin/Rick + Daan verify | Audit → Fix → Verify improvement |
+| Code review (PR) | Fan-out: Eva + Mark + Lisa → gather | Parallel review → Consensus → Summary |
 
 ### Collaboration Protocol
 
-- **Peer review at every checkpoint** — agents review each other's output before the next phase
-- **Discussion is encouraged** — agents debate approaches and raise concerns openly
-- **Reviewer is dedicated** — the Reviewer agent does not implement; it only reviews
-- **Conflicts go to the Orchestrator** — unresolved disagreements are decided by the team lead
-- **No solo commits** — the Orchestrator authorizes all commits after final review
-- **Reports to Orchestrator** — each agent reports: what was done, decisions made, concerns raised
-- **Repetition detection** — if an agent does something manually for the 2nd time, it logs this in its Repetition Log and proposes a new skill to the Orchestrator
+#### [MUST] Rules
+- **Voting at every checkpoint** — agents vote APPROVE / CONCERN / BLOCK on each other's output
+- **Role agents [MUST NOT] implement** — they advise, review, and recommend only
+- **Every correction triggers auto-improve** — agent [MUST] update its own file with the lesson
+- **Niels runs after every task** — documentation sync is automatic and mandatory
+- **Repetition detection** — 2nd manual occurrence → agent [MUST] propose a skill
+
+#### [SHOULD] Guidelines
+- **Discussion before consensus** — agents [SHOULD] debate approaches and raise concerns
+- **Fan-out for reviews** — multiple role agents [SHOULD] review in parallel, not sequentially
+- **Present approach before building** — Rick [SHOULD] describe his plan in 3 bullets before multi-file changes
+
+### Voting Protocol
+
+When agents need to reach consensus (design decisions, readiness checks, risk assessments):
+
+| Vote | Meaning | Blocks? |
+|------|---------|---------|
+| **APPROVE** | No issues from my perspective | No |
+| **CONCERN** | Minor issues, can proceed with notes | No |
+| **BLOCK** | Critical issues, [MUST] be resolved first | **Yes** |
+
+**Consensus = zero BLOCKs + majority APPROVE.**
+- Sophie and Eva have **automatic BLOCK** on data integrity and CRITICAL security issues respectively.
+- Blockers [MUST] specify exactly what needs to change.
+- If consensus cannot be reached, the user makes the final call.
+
+### Estimation Protocol
+
+When the team estimates effort:
+1. Each agent estimates independently from their perspective (prevents anchoring)
+2. Estimates [MUST] be shared simultaneously
+3. If estimates differ >2x → discussion round to understand why
+4. Final estimate = team median + risk buffer from highest outlier
+5. Confidence level [MUST] always be stated: HIGH / MEDIUM / LOW
+
+### Agent Communication
+
+```python
+# Spawn with name
+Agent(subagent_type: "plan", name: "thomas", prompt: "design feature X")
+
+# Send message to running agent
+SendMessage(to: "thomas", message: "Sophie recommends adding an index on user_id")
+
+# Fan-out review
+Agent(subagent_type: "security-engineer", name: "eva", prompt: "review diff")
+Agent(subagent_type: "qa-lead", name: "mark", prompt: "review diff")
+Agent(subagent_type: "ux-designer", name: "lisa", prompt: "review diff")
+
+# Parallel build in worktrees
+Agent(subagent_type: "feature", name: "rick-backend", isolation: "worktree", prompt: "build API")
+Agent(subagent_type: "feature", name: "rick-frontend", isolation: "worktree", prompt: "build UI")
+```
+
+### Auto-Improvement Protocol
+
+> **[MUST]** — This is the mechanism that makes agents smarter over time.
+
+When an agent is corrected on a mistake, gotcha, or suboptimal approach:
+
+1. **[MUST] Update `## Gotchas`** in its own agent file — add the specific pitfall with context
+2. **[MUST] Update `## Lessons Learned`** — record what happened and the correct approach
+3. **[SHOULD] Check for pattern** — is this a gotcha that affects other agents too?
+4. **[SHOULD] Propose skill** — if this is the 2nd occurrence, propose a reusable skill
+
+Format for gotcha entries:
+```markdown
+## Gotchas
+- **[SHORT TITLE]** — [what goes wrong] → [correct approach]. Discovered: [date]
+```
+
+This ensures agents never make the same mistake twice.
 
 ---
 
@@ -161,23 +235,23 @@ In both cases:
 
 | Skill | File | Used By | Purpose |
 |-------|------|---------|---------|
-| Bootstrap Interview | [skills/bootstrap-interview.md](skills/bootstrap-interview.md) | Orchestrator | Project setup, tech stack discovery |
-| Code Review | [skills/code-review.md](skills/code-review.md) | Reviewer | Structured code review process |
-| Design Review | [skills/design-review.md](skills/design-review.md) | Architect | Architecture & design evaluation |
-| Implementation | [skills/implement.md](skills/implement.md) | Developer | Feature implementation workflow |
-| Test Generation | [skills/test-generate.md](skills/test-generate.md) | Tester | Test creation & coverage strategy |
-| Documentation Update | [skills/doc-update.md](skills/doc-update.md) | All agents | MANDATORY post-task documentation |
-| Refactor | [skills/refactor.md](skills/refactor.md) | Developer | Safe refactoring with verification |
-| Debug | [skills/debug.md](skills/debug.md) | Developer | Systematic debugging process |
-| ADR Create | [skills/adr-create.md](skills/adr-create.md) | Architect | Architecture Decision Record creation |
-| Security Audit | [skills/security-audit.md](skills/security-audit.md) | Reviewer | Security vulnerability assessment |
-| Coverage Check | [skills/coverage-check.md](skills/coverage-check.md) | Tester | Test coverage analysis |
-| Doc Audit | [skills/doc-audit.md](skills/doc-audit.md) | Documenter | Documentation completeness check |
-| Insights | [skills/insights.md](skills/insights.md) | Orchestrator | Periodic system tuning via `/loop` |
+| Bootstrap Interview | [skills/bootstrap-interview.md](skills/bootstrap-interview.md) | User | Project setup, tech stack discovery |
+| Code Review | [skills/code-review.md](skills/code-review.md) | Mark (QA) | Structured code review process |
+| Design Review | [skills/design-review.md](skills/design-review.md) | Thomas (Plan) | Architecture & design evaluation |
+| Implementation | [skills/implement.md](skills/implement.md) | Rick (Dev) | Feature implementation workflow |
+| Test Generation | [skills/test-generate.md](skills/test-generate.md) | Sanne (Test) | Test creation & coverage strategy |
+| Documentation Update | [skills/doc-update.md](skills/doc-update.md) | Niels (Docs) | **[MANDATORY]** post-task documentation |
+| Refactor | [skills/refactor.md](skills/refactor.md) | Rick (Dev) | Safe refactoring with verification |
+| Debug | [skills/debug.md](skills/debug.md) | Karin (Fix) | Systematic debugging process |
+| ADR Create | [skills/adr-create.md](skills/adr-create.md) | Thomas (Plan) | Architecture Decision Record creation |
+| Security Audit | [skills/security-audit.md](skills/security-audit.md) | Eva (Security) | Security vulnerability assessment |
+| Coverage Check | [skills/coverage-check.md](skills/coverage-check.md) | Sanne (Test) | Test coverage analysis |
+| Doc Audit | [skills/doc-audit.md](skills/doc-audit.md) | Niels (Docs) | Documentation completeness check |
+| Insights | [skills/insights.md](skills/insights.md) | User | Periodic system tuning via `/loop` |
 
 > **To add a new skill:** Copy `skills/_template.md`, fill it in, add a row to this table.
 >
-> **Periodic tuning:** Run `/loop 30m /insights` during active development to auto-detect repetitive patterns, promote conventions, and tune agent performance.
+> **Periodic tuning:** Run `/loop 4h /insights` during active development to auto-detect repetitive patterns, promote conventions, and tune agent performance.
 
 ---
 
@@ -185,21 +259,22 @@ In both cases:
 
 > When working on a task, consult the relevant docs AND the relevant agents/skills.
 
-| When working on... | Consult Docs | Consult Agent | Use Skill |
-|--------------------|-------------|---------------|-----------|
-| New project setup | All docs | Orchestrator | `bootstrap-interview` |
-| New feature | [Feature Checklist](docs/getting-started/new-feature-checklist.md) | Architect → Developer → Tester | `implement`, `test-generate` |
-| Database changes | [Database](docs/architecture/database.md), [Migrations](docs/development/migrations.md) | Architect → Developer | `implement` |
-| Architecture decisions | [Decision Records](docs/decisions/) | Architect | `design-review`, `adr-create` |
-| Code structure | [Code Organization](docs/development/code-organization.md) | Developer | `implement` |
-| Writing tests | [Testing Strategy](docs/development/testing.md) | Tester | `test-generate`, `coverage-check` |
-| Code review | [Code Organization](docs/development/code-organization.md) | Reviewer | `code-review`, `security-audit` |
-| UI work | [UI Patterns](docs/ui/patterns.md) | Developer | `implement` |
-| Deployment | [Deployment](docs/operations/deployment.md) | Orchestrator | — |
-| CI/CD | [CI/CD](docs/operations/ci.md) | Orchestrator | — |
-| Bug fix | [Testing](docs/development/testing.md) | Developer → Tester | `debug`, `test-generate` |
-| Refactoring | [Code Organization](docs/development/code-organization.md) | Architect → Developer → Reviewer | `refactor`, `code-review` |
-| **After ANY task** | **All affected docs** | **Documenter** | **`doc-update` (MANDATORY)** |
+| When working on... | Consult Docs | Agents | Skills |
+|--------------------|-------------|--------|--------|
+| New project setup | All docs | User (runs bootstrap) | `bootstrap-interview` |
+| New feature | [Feature Checklist](docs/getting-started/new-feature-checklist.md) | Thomas → Rick + Sanne + reviewers | `implement`, `test-generate` |
+| Database changes | [Database](docs/architecture/database.md), [Migrations](docs/development/migrations.md) | Thomas → Sophie → Rick | `implement` |
+| Architecture decisions | [Decision Records](docs/decisions/) | Thomas + Sophie + Daan | `design-review`, `adr-create` |
+| Code structure | [Code Organization](docs/development/code-organization.md) | Rick | `implement` |
+| Writing tests | [Testing Strategy](docs/development/testing.md) | Sanne | `test-generate`, `coverage-check` |
+| Code review | [Code Organization](docs/development/code-organization.md) | Mark + Eva + Lisa (fan-out) | `code-review`, `security-audit` |
+| UI work | [UI Patterns](docs/ui/patterns.md) | Lisa → Rick + Lisa review | `implement` |
+| Deployment | [Deployment](docs/operations/deployment.md) | — | — |
+| CI/CD | [CI/CD](docs/operations/ci.md) | — | — |
+| Bug fix | [Testing](docs/development/testing.md) | Karin + Sanne + Mark | `debug`, `test-generate` |
+| Refactoring | [Code Organization](docs/development/code-organization.md) | Thomas → Rick + Mark | `refactor`, `code-review` |
+| Performance issue | [Code Organization](docs/development/code-organization.md) | Daan → Rick/Karin + Daan verify | `debug`, `implement` |
+| **After ANY task** | **All affected docs** | **Niels [MANDATORY]** | **`doc-update`** |
 
 ---
 
@@ -231,32 +306,34 @@ See:
 
 > **This section governs how the entire system evolves.** Every agent, skill, and doc follows this.
 
-### MANDATORY Post-Task Updates (Non-Negotiable)
+### [MANDATORY] Post-Task Updates
 
-After EVERY completed task, the following MUST happen:
+After EVERY completed task, the following **[MUST]** happen:
 
-1. **Run `skills/doc-update.md`** — The Documenter agent (or the acting agent) updates all affected documentation.
-2. **Update this file** — If any section of CLAUDE.md was affected, update it now.
-3. **Update agent files** — Every agent involved records what it learned in its `## Lessons Learned` section.
-4. **Update skill files** — Every skill used records improvements in its `## Improvement Log` section.
-5. **Replace `[NOT YET CONFIGURED]`** — If any information was discovered, fill it in immediately.
-6. **Create feature docs** — For any new feature: `docs/features/<feature-name>.md`.
-7. **Create ADRs** — For any architectural decision: `docs/decisions/NNN-title.md`.
+1. **Niels runs `skills/doc-update.md`** — updates all affected documentation
+2. **Update CLAUDE.md** — if any section was affected, update it now
+3. **Agent auto-improve** — every agent involved **[MUST]** record what it learned:
+   - `## Gotchas` — new pitfalls discovered (with date and context)
+   - `## Lessons Learned` — what worked, what didn't, what to do differently
+4. **Skill improvement** — every skill used **[SHOULD]** update its `## Improvement Log`
+5. **Replace `[NOT YET CONFIGURED]`** — if information was discovered, fill it in immediately
+6. **Create feature docs** — for any new feature: `docs/features/<feature-name>.md`
+7. **Create ADRs** — for any architectural decision: `docs/decisions/NNN-title.md`
 
 ### Self-Improvement Triggers
 
-| Event | Action | Who |
-|-------|--------|-----|
-| Task completed | Update all affected docs, agents, skills | All involved agents |
-| **Repetitive task detected** | **Log in agent's Repetition Log; if 2nd occurrence → propose skill to Orchestrator** | **The detecting agent → Orchestrator** |
-| Pattern works twice | Promote to convention in CLAUDE.md + docs | Documenter |
-| Mistake found | Record in agent's lessons + update relevant docs | The agent that erred |
-| New tech introduced | Create/update agent + skills for it | Orchestrator |
-| User gives feedback | Update conventions, agent behavior, skill procedures | Orchestrator |
-| `[NOT YET CONFIGURED]` encountered | Run bootstrap or ask user | Orchestrator |
-| Agent created | Add to CLAUDE.md agent table | Orchestrator |
-| Skill created | Add to CLAUDE.md skill table | Orchestrator |
-| **`/insights` runs** | **Harvest lessons, detect repetition, promote conventions, tune agents** | **Orchestrator** |
+| Event | Action | Who | Priority |
+|-------|--------|-----|----------|
+| Agent corrected on mistake | **[MUST]** Update `## Gotchas` + `## Lessons Learned` in agent file | The corrected agent | **[MUST]** |
+| Task completed | Update all affected docs, agents, skills | All involved agents | **[MUST]** |
+| Repetitive task (2nd occurrence) | Log in Repetition Log → propose skill | Detecting agent → User | **[MUST]** |
+| Pattern works twice | Promote to convention in CLAUDE.md + docs | Niels | **[SHOULD]** |
+| New tech introduced | Create/update agent + skills for it | User | **[SHOULD]** |
+| User gives feedback | Update conventions, agent behavior, skill procedures | User | **[MUST]** |
+| `[NOT YET CONFIGURED]` encountered | Run bootstrap or ask user | User | **[MUST]** |
+| Agent created | Add to CLAUDE.md agent table | User | **[MUST]** |
+| Skill created | Add to CLAUDE.md skill table | User | **[MUST]** |
+| `/insights` runs | Harvest lessons, detect repetition, promote conventions, tune agents | User | **[SHOULD]** |
 
 ### Periodic Tuning
 
@@ -284,15 +361,16 @@ The insights skill scans all agent Repetition Logs, Lessons Learned, and Skill I
 
 ### Quality Gates
 
-Before implementing any feature, verify:
-1. Is there a feature doc in `docs/features/`? **If not, create one first.**
+**Before** implementing any feature — **[MUST]** verify:
+1. Is there a feature doc in `docs/features/`? If not, create one first.
 2. Do the architecture docs cover the patterns being used?
 3. Are test patterns documented for this type of code?
-4. Are the right agents and skills identified for this task?
+4. Are the right agents identified for this task?
 5. Is the UI approach consistent with documented patterns?
 
-After implementing any feature, verify:
-1. **Were all docs updated?** (This is mandatory, check again.)
-2. Were agent lessons recorded?
+**After** implementing any feature — **[MUST]** verify:
+1. Were all docs updated? (This is **[MANDATORY]**, check again.)
+2. Were agent gotchas and lessons updated?
 3. Were skill improvements logged?
 4. Does CLAUDE.md reflect the current state?
+5. Did all agents vote? Is consensus reached?

@@ -1,7 +1,7 @@
 # Skill: ADR Create
 
 > **Purpose:** Create Architecture Decision Records for significant technical decisions
-> **Used by:** Architect
+> **Used by:** Thomas (Plan)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -12,7 +12,7 @@ Invoke this skill when:
 - A significant architectural or technical decision is made
 - A technology choice needs to be documented
 - A design trade-off was explicitly evaluated
-- The Architect agent recommends recording a decision
+- Thomas recommends recording a decision
 
 ## Input
 

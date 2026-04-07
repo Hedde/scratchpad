@@ -1,7 +1,7 @@
 # Skill: Security Audit
 
 > **Purpose:** Check code for security vulnerabilities and unsafe patterns
-> **Used by:** Reviewer
+> **Used by:** Eva (Security)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -12,7 +12,7 @@ Invoke this skill when:
 - Code has been written or modified
 - A security-sensitive feature is being implemented (auth, payments, data handling)
 - A security review is requested
-- The Reviewer agent runs its review workflow
+- Eva runs her security review workflow
 
 ## Input
 

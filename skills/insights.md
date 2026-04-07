@@ -1,7 +1,7 @@
 # Skill: Insights — Periodic System Tuning
 
 > **Purpose:** Audit and tune the agent/skill/doc system based on accumulated experience
-> **Used by:** Orchestrator (via `/loop` — e.g., `/loop 30m /insights`)
+> **Used by:** User (via `/loop` — e.g., `/loop 4h /insights`)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -9,7 +9,7 @@
 ## When to Use
 
 Invoke this skill:
-- **Periodically** via `/loop` (recommended: every 30-60 minutes during active development)
+- **Periodically** via `/loop` (recommended: every 4 hours during active development)
 - After a burst of tasks (5+ completed tasks)
 - When the system feels sluggish, repetitive, or misaligned
 - When a new team member joins and needs a calibrated system
@@ -51,10 +51,10 @@ Check for work that's been done manually 2+ times but isn't a skill yet:
 ```
 Sources to check:
   - Agent Lessons Learned: "I did X again" / "Same as last time"
-  - Agent Improvement Backlogs: pending items
+  - Agent Repetition Logs: pending patterns
   - Skill Improvement Logs: "should have been a skill"
   - Git log: repeated commit patterns (similar messages, similar file sets)
-  - Orchestrator: repeated team assembly patterns
+  - User: repeated team assembly patterns
 ```
 
 For each repetitive pattern found:

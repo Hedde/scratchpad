@@ -56,7 +56,7 @@ test/
 # Example integration test
 ```
 
-### UI / LiveView / Component Tests
+### UI / Component Tests
 
 ```
 # Example UI test
@@ -80,9 +80,11 @@ test/
 
 | Layer | Target |
 |-------|--------|
-| Pure functions / helpers | 90-100% |
-| Business logic | 70-80% |
-| UI handlers | 60-70% |
+| Security / Auth | 90-100% |
+| Business logic | 70-85% |
+| API / Controllers | 60-75% |
+| Utilities | 80-90% |
+| UI handlers | 60-75% |
 
 ### Checking Coverage
 

@@ -1,7 +1,7 @@
 # Skill: Design Review
 
 > **Purpose:** Evaluate architecture and design proposals for quality and fitness
-> **Used by:** Architect
+> **Used by:** Thomas (Plan)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -39,7 +39,7 @@ Invoke this skill when:
 ### Step 4: Produce Recommendation
 1. Clear recommendation with rationale
 2. If the decision is significant, recommend creating an ADR
-3. Identify implementation guidance for the Developer agent
+3. Identify implementation guidance for Rick (Dev)
 
 ### Step 5: Update Documentation (MANDATORY)
 1. Update relevant `docs/architecture/` files

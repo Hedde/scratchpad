@@ -1,7 +1,7 @@
 # Skill: Code Review
 
 > **Purpose:** Structured code review for quality, correctness, and convention adherence
-> **Used by:** Reviewer
+> **Used by:** Mark (QA)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -54,9 +54,9 @@ Invoke this skill when:
 
 ### Step 7: Provide Feedback
 Format findings as:
-- **Must Fix:** Issues that need to be resolved before merge
-- **Should Fix:** Improvements that should be made
-- **Consider:** Optional suggestions for improvement
+- **MUST FIX:** Issues that [MUST] be resolved before merge
+- **SHOULD FIX:** Improvements that [SHOULD] be made
+- **COULD FIX:** Optional suggestions for improvement
 - **Praise:** Things done well (reinforce good patterns)
 
 ## Output

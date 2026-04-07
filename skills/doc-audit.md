@@ -1,7 +1,7 @@
 # Skill: Documentation Audit
 
 > **Purpose:** Periodic health check of all project documentation
-> **Used by:** Documenter
+> **Used by:** Niels (Docs)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16

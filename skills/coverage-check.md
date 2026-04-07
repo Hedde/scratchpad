@@ -1,7 +1,7 @@
 # Skill: Coverage Check
 
 > **Purpose:** Analyze test coverage and identify gaps
-> **Used by:** Tester
+> **Used by:** Sanne (Test)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -12,7 +12,7 @@ Invoke this skill when:
 - After writing tests, to verify coverage targets are met
 - When assessing the overall test health of the project
 - Before a release to check for coverage regressions
-- The Tester agent needs to verify coverage
+- Sanne needs to verify coverage
 
 ## Input
 
@@ -28,9 +28,11 @@ Invoke this skill when:
 
 ### Step 2: Analyze
 1. Compare coverage against project targets:
-   - Pure functions / helpers: 90-100%
-   - Business logic: 70-80%
-   - UI handlers: 60-70%
+   - Security / Auth: 90-100%
+   - Business logic: 70-85%
+   - API / Controllers: 60-75%
+   - Utilities: 80-90%
+   - UI handlers: 60-75%
 2. Identify uncovered lines and branches
 3. Categorize gaps by risk: which uncovered code is most dangerous?
 

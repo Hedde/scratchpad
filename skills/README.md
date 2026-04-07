@@ -9,22 +9,23 @@
 skills/
   ├── _template.md            # Base template for new skills
   ├── bootstrap-interview.md  # Project setup & tech stack discovery
-  ├── implement.md            # Feature implementation workflow
-  ├── code-review.md          # Structured code review
-  ├── design-review.md        # Architecture evaluation
-  ├── test-generate.md        # Test creation & strategy
-  ├── coverage-check.md       # Coverage analysis
-  ├── debug.md                # Systematic debugging
-  ├── refactor.md             # Safe refactoring
-  ├── doc-update.md           # MANDATORY post-task documentation (used by ALL agents)
-  ├── doc-audit.md            # Documentation health check
-  ├── adr-create.md           # Architecture Decision Record creation
-  └── security-audit.md       # Security vulnerability check
+  ├── implement.md            # Feature implementation workflow (Rick)
+  ├── code-review.md          # Structured code review (Mark)
+  ├── design-review.md        # Architecture evaluation (Thomas)
+  ├── test-generate.md        # Test creation & strategy (Sanne)
+  ├── coverage-check.md       # Coverage analysis (Sanne)
+  ├── debug.md                # Systematic debugging (Karin)
+  ├── refactor.md             # Safe refactoring (Rick)
+  ├── doc-update.md           # [MANDATORY] post-task documentation (Niels)
+  ├── doc-audit.md            # Documentation health check (Niels)
+  ├── adr-create.md           # Architecture Decision Record creation (Thomas)
+  ├── security-audit.md       # Security vulnerability check (Eva)
+  └── insights.md             # Periodic system tuning (User via /loop)
 ```
 
 ## How Skills Work
 
-1. An agent (or the orchestrator) identifies a skill needed for the task
+1. An agent (or the user) identifies a skill needed for the task
 2. The skill file is read for the procedure
 3. The procedure is followed step-by-step
 4. After execution, the skill's `## Improvement Log` is updated with lessons learned

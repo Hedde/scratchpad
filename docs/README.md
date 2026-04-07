@@ -7,17 +7,21 @@ Living documentation that grows with the project. Part of a self-improving syste
 ```
 CLAUDE.md                     # Orchestrator trigger file — entry point for all tasks
   │
-  ├── agents/                 # Reusable AI specialist personas
-  │   ├── orchestrator.md     # Team lead: assembles teams, coordinates, reviews final output
-  │   ├── architect.md        # System design, patterns, ADRs
-  │   ├── developer.md        # Implementation, debugging, refactoring
-  │   ├── reviewer.md         # Code review, security, quality
-  │   ├── tester.md           # Testing strategy, test writing, coverage
-  │   └── documenter.md       # Documentation maintenance (mandatory after all tasks)
+  ├── agents/                 # Named specialist personas (Role + Task agents)
+  │   ├── ux-designer.md      # Lisa — UI patterns, accessibility, responsive design
+  │   ├── qa-lead.md          # Mark — Production readiness, quality dimensions
+  │   ├── performance-engineer.md  # Daan — Runtime performance at scale
+  │   ├── database-specialist.md   # Sophie — Schema, migrations, data integrity
+  │   ├── security-engineer.md     # Eva — OWASP, access control, threat modeling
+  │   ├── plan.md             # Thomas — Implementation planning (zero code)
+  │   ├── feature.md          # Rick — Full-stack implementation
+  │   ├── fix.md              # Karin — Root cause analysis, bug fixes
+  │   ├── test.md             # Sanne — Test strategy, coverage improvement
+  │   └── docs-sync.md        # Niels — Documentation sync (automatic)
   │
   ├── skills/                 # Composable procedures used by agents
   │   ├── bootstrap-interview.md, implement.md, code-review.md, ...
-  │   └── doc-update.md       # MANDATORY post-task skill — used by ALL agents
+  │   └── doc-update.md       # [MANDATORY] post-task skill — triggered by Niels
   │
   └── docs/                   # Project knowledge base (this folder)
       ├── architecture/       # System design, database patterns
@@ -31,13 +35,12 @@ CLAUDE.md                     # Orchestrator trigger file — entry point for al
 
 ## How Documentation Evolves
 
-Documentation updates are **MANDATORY after every task**. This is enforced by:
+Documentation updates are **[MANDATORY] after every task**. This is enforced by:
 
-1. Every agent triggers `skills/doc-update.md` as its final step
-2. The Documenter agent exists solely to ensure documentation stays current
-3. `CLAUDE.md` explicitly requires documentation updates as non-negotiable
-4. Agent `Lessons Learned` sections grow with every task
-5. Skill `Improvement Log` sections grow with every use
+1. Niels (docs-sync agent) triggers `skills/doc-update.md` as the final step
+2. `CLAUDE.md` explicitly requires documentation updates as non-negotiable
+3. Agent `Gotchas` and `Lessons Learned` sections grow with every correction and task
+4. Skill `Improvement Log` sections grow with every use
 
 ## Principles
 

@@ -1,7 +1,7 @@
 # Skill: Debug
 
 > **Purpose:** Systematic debugging process to find and fix root causes
-> **Used by:** Developer
+> **Used by:** Karin (Fix)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16

@@ -1,10 +1,10 @@
 # Skill: Bootstrap — Auto-Discovery & Configuration
 
 > **Purpose:** Detect project type (existing vs new), discover what's there, fill in the gaps via decisions with the user
-> **Used by:** Orchestrator
+> **Used by:** User (orchestrator)
 > **Status:** Active
 > **Created:** 2026-03-16
-> **Last Improved:** 2026-03-16
+> **Last Improved:** 2026-04-07
 
 ## When to Use
 
@@ -22,21 +22,22 @@ Invoke this skill when:
 
 ### Step 0: Detect Project Type
 
-**This is the critical first step.** Determine if this is an existing or new project:
+> **[MUST]** — This is the critical first step. Never skip detection.
+
+Scan the project directory for NON-template files:
 
 ```
-Scan the project directory for NON-template files:
-  - Source code files (*.ex, *.py, *.ts, *.go, *.rs, *.rb, *.java, etc.)
-  - Package manifests (mix.exs, package.json, Cargo.toml, go.mod, Gemfile, pom.xml, pyproject.toml, requirements.txt, etc.)
-  - Config files (docker-compose.yml, .env.example, Dockerfile, etc.)
-  - CI/CD configs (.github/workflows/, .gitlab-ci.yml, etc.)
-  - Database files (schema.rb, priv/repo/migrations/, alembic/, etc.)
-  - Any file NOT in docs/, agents/, skills/, or CLAUDE.md
+Source code files (*.py, *.ts, *.go, *.rs, *.rb, *.java, *.ex, *.cs, etc.)
+Package manifests (package.json, Cargo.toml, go.mod, Gemfile, pom.xml, pyproject.toml, etc.)
+Config files (docker-compose.yml, .env.example, Dockerfile, etc.)
+CI/CD configs (.github/workflows/, .gitlab-ci.yml, etc.)
+Database files (migrations/, schema files, etc.)
+Any file NOT in docs/, agents/, skills/, or CLAUDE.md
 ```
 
 **Decision:**
-- **Files found → EXISTING PROJECT** — Go to Step 1A (Discovery-first)
-- **No files found → NEW PROJECT** — Go to Step 1B (Decisions-first)
+- **Files found → EXISTING PROJECT** — Go to Path A (Discovery-first)
+- **No files found → NEW PROJECT** — Go to Path B (Decisions-first)
 
 ---
 
@@ -44,24 +45,25 @@ Scan the project directory for NON-template files:
 
 > Philosophy: scan everything first, present findings, only ask about what can't be discovered.
 
-#### Step 1A: Auto-Discover Tech Stack
+#### Step 1A: [MUST] Auto-Discover Tech Stack
 
-Scan and analyze (do NOT ask the user yet):
+Scan and analyze — do NOT ask the user yet:
 
 | What to Detect | Where to Look |
 |---------------|--------------|
 | Language & framework | Package manifests, file extensions, imports |
 | Framework version | Lock files, version pins in manifests |
 | Database | Config files, ORM/schema files, docker-compose services |
-| Test framework | Test directories, test config, package manifest dev-deps |
-| Linter/formatter | Config files (`.eslintrc`, `.prettierrc`, `mix.exs`, `ruff.toml`, etc.) |
+| Test framework | Test directories, test config, dev-dependencies |
+| Linter/formatter | Config files (`.eslintrc`, `.prettierrc`, `ruff.toml`, `biome.json`, etc.) |
 | CI/CD | `.github/workflows/`, `.gitlab-ci.yml`, `Jenkinsfile`, etc. |
 | Deployment | `Dockerfile`, `fly.toml`, `render.yaml`, `vercel.json`, `Procfile`, etc. |
 | Styling/CSS | Tailwind config, PostCSS, CSS-in-JS imports, stylesheet files |
 | Key libraries | Dependencies in manifest, imports in source code |
 | Dev environment | `docker-compose.yml`, `.devcontainer/`, `flake.nix`, `Makefile` |
+| Coding standards | Linter/formatter configs, `.editorconfig`, pre-commit hooks |
 
-#### Step 2A: Auto-Discover Project Structure
+#### Step 2A: [MUST] Auto-Discover Project Structure
 
 ```
 - Map the directory tree (top 3 levels)
@@ -70,22 +72,35 @@ Scan and analyze (do NOT ask the user yet):
 - Identify config vs. source vs. generated directories
 ```
 
-#### Step 3A: Auto-Discover Conventions
+#### Step 3A: [MUST] Auto-Discover Conventions
 
-Analyze actual code for patterns (do NOT ask yet):
+Analyze actual code for patterns — do NOT ask yet:
 
 | What to Detect | How |
 |---------------|-----|
 | Naming conventions | Sample file names, function names, variable names |
 | Code organization | Module structure, layering, separation of concerns |
 | Test patterns | Test file structure, helper usage, assertion style |
-| Git conventions | Read recent commit messages from `git log` |
+| Git conventions | Read recent commit messages from `git log --oneline -20` |
 | Import ordering | Read top of source files for import patterns |
 | Error handling | Scan for error handling patterns in source |
+| Coding standards | Parse linter/formatter config for enforced rules |
 
-#### Step 4A: Present Findings to User
+#### Step 4A: [MUST] Auto-Discover Commands
 
-**This is the critical decision step.** Present ALL discoveries as a structured report:
+Detect runnable commands before presenting findings:
+
+| Command Type | Where to Find |
+|-------------|--------------|
+| Dev server | `package.json` scripts, `Makefile`, `Procfile`, README |
+| Tests | `package.json` scripts, `Makefile`, README, CI config |
+| Linting/formatting | `package.json` scripts, `Makefile`, pre-commit config |
+| Database | `package.json` scripts, `Makefile`, README |
+| Build | `package.json` scripts, `Makefile`, `Dockerfile`, CI config |
+
+#### Step 5A: [MUST] Present Discovery Report
+
+Present ALL discoveries as a structured report:
 
 ```
 DISCOVERY REPORT
@@ -105,8 +120,17 @@ Tech Stack (discovered):
   ? Styling: [detected or "not found — what do you use?"]
   ? [anything unclear]
 
-Project Structure (discovered):
-  [directory tree]
+Commands (discovered):
+  ✓ Dev server: [command]
+  ✓ Tests: [command]
+  ✓ Lint/format: [command]
+  ? [any unclear]
+
+Coding Standards (from config):
+  ✓ [rules detected from linter/formatter configs]
+
+Project Structure:
+  [directory tree, top 3 levels]
 
 Conventions (observed):
   ✓ Naming: [observed pattern]
@@ -117,48 +141,40 @@ Conventions (observed):
 Items needing your input:
   1. [thing that couldn't be discovered]
   2. [thing that was ambiguous]
-  3. [description — what does this project do?]
 
 Does this look correct? What should I change or add?
 ```
 
-#### Step 5A: Process User Corrections & Fill Gaps
+#### Step 6A: [MUST] Process User Corrections
 
 1. Apply any corrections the user provides
 2. Ask targeted questions ONLY for items marked with `?`
-3. **Immediately update** all docs, agents, and skills with confirmed information (see update targets below)
+3. **[MUST]** immediately update all docs, agents, and skills (see Update Targets)
 
-#### Step 6A: Discover Commands
+#### Step 7A: [SHOULD] Discover Workflow Patterns
 
-Try to detect runnable commands:
+Ask the user about recurring tasks and workflows:
+- "What tasks do you do repeatedly that could become skills?"
+- "Are there safety checks or validation steps you always run?"
+- "What are common gotchas new developers hit in this codebase?"
 
-| Command Type | Where to Find |
-|-------------|--------------|
-| Dev server | `package.json` scripts, `Makefile`, `Procfile`, README |
-| Tests | `package.json` scripts, `mix.exs` aliases, `Makefile`, README |
-| Linting | `package.json` scripts, `Makefile`, pre-commit config |
-| Database | `package.json` scripts, `mix.exs` aliases, `Makefile` |
-| Build | `package.json` scripts, `Makefile`, `Dockerfile` |
-
-**Present to user:** "I found these commands — are they correct?"
-
-**Immediately update:** `docs/development/workflow.md` with confirmed commands.
+Create skills for any patterns identified.
 
 ---
 
 ### PATH B: New Project (Decisions-First)
 
-> Philosophy: nothing to discover, so ask the user for all decisions upfront.
+> Philosophy: nothing to discover, so gather all decisions upfront.
 
-#### Step 1B: Project Identity
+#### Step 1B: [MUST] Project Identity
 Ask the user:
 - What is the project name?
 - One-liner description — what does it do?
 - Repository URL (if exists)
 
-**Immediately update:** `CLAUDE.md` → Project Identity section
+**[MUST]** immediately update: `CLAUDE.md` → Project Identity section
 
-#### Step 2B: Tech Stack Decisions
+#### Step 2B: [MUST] Tech Stack Decisions
 Ask about:
 - Language & framework (with preferred versions)
 - Database (type, hosting)
@@ -167,49 +183,56 @@ Ask about:
 - Deployment target (cloud, PaaS, VPS, etc.)
 - CI/CD provider
 
-**Immediately update:** all docs (see update targets below)
+**[MUST]** immediately update: all docs (see Update Targets)
 
-#### Step 3B: Development Environment Decisions
+#### Step 3B: [MUST] Development Environment Decisions
 Ask about:
 - Local dev, Docker, devcontainer, or other
 - Prerequisites for development
 - Setup commands they want to use
 
-**Immediately update:** `docs/development/workflow.md`
+**[MUST]** immediately update: `docs/development/workflow.md`
 
-#### Step 4B: Convention Decisions
+#### Step 4B: [SHOULD] Convention Decisions
 Ask about:
 - Code style (formatter, linter, style guide)
 - Naming conventions (files, modules, functions, variables)
 - Testing philosophy (TDD, coverage targets, test types)
 - Git conventions (beyond conventional commits)
 
-**Immediately update:** `CLAUDE.md` conventions + `docs/development/`
+**[MUST]** immediately update: `CLAUDE.md` conventions + `docs/development/`
 
-#### Step 5B: Initial Structure
+#### Step 5B: [SHOULD] Initial Structure
 Ask about or propose:
 - What directory structure do they want?
 - What are the main modules/components?
 - Propose a structure based on chosen tech stack
 
-**Immediately update:** `CLAUDE.md` → Project Structure, `docs/development/code-organization.md`
+**[MUST]** immediately update: `CLAUDE.md` → Project Structure, `docs/development/code-organization.md`
 
 ---
 
-### Step 7: Configure Agents and Skills (Both Paths)
+### Step 8: [MUST] Configure Agents (Both Paths)
 
-Based on the (discovered or decided) tech stack, update all agent and skill files:
-- Fill in `[NOT YET CONFIGURED]` in every agent's "Project-Specific Configuration"
-- Fill in `[NOT YET CONFIGURED]` in every skill's "Project-Specific Notes"
-- Create stack-specific agents if needed (e.g., a "Database" agent for data-heavy projects)
-- Create stack-specific skills if needed (e.g., a "migration-create" skill for DB projects)
+Based on the (discovered or decided) tech stack, update all agent files:
 
-**Immediately update:**
-- All agent files in `agents/`
-- All skill files in `skills/`
-- `CLAUDE.md` → Agent and Skill tables (if new ones were created)
+1. **[MUST]** Fill in `[NOT YET CONFIGURED]` in every agent's "Project-Specific Configuration":
+   - **Lisa (UX):** UI framework, component library, design system, breakpoints
+   - **Mark (QA):** Test commands, linting commands, quality thresholds
+   - **Daan (Performance):** Expected load profile, database engine, caching tools
+   - **Sophie (Database):** Database engine, ORM, migration tool, naming conventions
+   - **Eva (Security):** Auth framework, session mechanism, deployment security
+   - **Thomas (Plan):** Key architecture patterns, common file locations
+   - **Rick (Dev):** Tech stack, framework patterns, coding conventions, test commands
+   - **Karin (Fix):** Common bug patterns, known gotchas, test commands
+   - **Sanne (Test):** Test framework, test commands, coverage tools, factory patterns
+   - **Niels (Docs):** Documentation structure, style guide, doc locations
 
-### Step 8: Verify Completeness
+2. **[SHOULD]** Fill in `[NOT YET CONFIGURED]` in every skill's "Project-Specific Notes"
+
+3. **[COULD]** Create stack-specific skills if needed
+
+### Step 9: [MUST] Verify Completeness
 
 Scan ALL files for remaining `[NOT YET CONFIGURED]` markers:
 - `CLAUDE.md`
@@ -217,7 +240,7 @@ Scan ALL files for remaining `[NOT YET CONFIGURED]` markers:
 - All files in `agents/`
 - All files in `skills/`
 
-If any remain that could have been filled, go back and fill them.
+If any remain that **[COULD]** have been filled, go back and fill them.
 
 ---
 
@@ -253,15 +276,16 @@ When updating, hit ALL of these:
 
 - [ ] Project type correctly detected (existing vs new)
 - [ ] For existing projects: discoveries presented before questions asked
+- [ ] For existing projects: coding standards extracted from config files
 - [ ] For new projects: decisions gathered systematically
 - [ ] User has confirmed or corrected all findings/decisions
 - [ ] Every section of `CLAUDE.md` is filled or explicitly deferred with reason
 - [ ] All `docs/` files have project-specific content
-- [ ] All agents have project-specific configuration
+- [ ] All 10 agents have project-specific configuration
 - [ ] All skills have project-specific notes
 - [ ] Development commands are verified to work
-- [ ] The project structure tree is accurate
+- [ ] Workflow patterns discovered and codified as skills
 
 ## Improvement Log
 
-[No entries yet — this log grows with use]
+- 2026-04-07: Added coding standards detection from config files (inspired by /init), added workflow pattern discovery step, added explicit agent configuration per-name, added RFC keywords throughout

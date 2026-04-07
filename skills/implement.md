@@ -1,7 +1,7 @@
 # Skill: Implementation
 
 > **Purpose:** Structured workflow for implementing features and code changes
-> **Used by:** Developer
+> **Used by:** Rick (Dev)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -11,7 +11,7 @@
 Invoke this skill when:
 - A new feature needs to be built
 - Existing code needs to be modified
-- An implementation needs to follow a design from the Architect agent
+- An implementation needs to follow a plan from Thomas
 
 ## Input
 
@@ -23,7 +23,7 @@ Invoke this skill when:
 ### Step 1: Pre-Flight Check
 1. Read `CLAUDE.md` for project conventions
 2. Check if a feature doc exists in `docs/features/`. **If not, create one from the template.**
-3. Read the Architect's design (if one exists)
+3. Read Thomas's plan (if one exists)
 4. Read relevant architecture docs from `docs/architecture/`
 5. Read code organization patterns from `docs/development/code-organization.md`
 

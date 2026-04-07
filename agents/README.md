@@ -1,90 +1,156 @@
-# Agent System
+# Agent System — Named Team
 
-> Agents are reusable AI specialist personas that work in **teams**. Each agent has a defined role,
-> assigned skills, and improves itself after every use. Agents collaborate, review each other's work,
-> and report to the Orchestrator (team lead) who makes the final call.
+> Agents are named specialists that work in **teams**. Role agents advise and review.
+> Task agents plan, build, fix, test, and document. The user orchestrates.
 
-## Architecture
+## The Team
 
 ```
-CLAUDE.md (Trigger File / Orchestrator Entry Point)
-  │
-  ├── agents/
-  │   ├── _template.md        # Base template for new agents
-  │   ├── orchestrator.md     # TEAM LEAD: assembles teams, final reviewer, authorizes commits
-  │   ├── architect.md        # System design, patterns, decisions
-  │   ├── developer.md        # Implementation, coding, debugging
-  │   ├── reviewer.md         # DEDICATED REVIEWER: quality, security (never implements)
-  │   ├── tester.md           # Testing strategy, test writing
-  │   └── documenter.md       # Documentation maintenance (mandatory after all tasks)
-  │
-  └── skills/                 # Composable procedures agents invoke
-      └── (see skills/README.md)
+┌─────────────────────────────────────────────────────────────┐
+│  ROLE AGENTS (Advisors — review, audit, recommend)          │
+│                                                             │
+│  Lisa (UX)    Mark (QA)     Daan (Perf)                     │
+│  Sophie (DB)  Eva (Security)                                │
+├─────────────────────────────────────────────────────────────┤
+│  TASK AGENTS (Executors — plan, build, fix, test, document) │
+│                                                             │
+│  Thomas (Plan)  Rick (Dev)    Karin (Fix)                   │
+│  Sanne (Test)   Niels (Docs)                                │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## Prerequisites
+## Agent Files
 
-For full team collaboration, Claude must be configured in **team/multi-agent mode**.
-In single-agent mode, one agent assumes all roles sequentially.
+```
+agents/
+├── _template.md              # Base template for new agents
+├── ux-designer.md            # Lisa — UI patterns, accessibility, responsive design
+├── qa-lead.md                # Mark — Production readiness, quality dimensions
+├── performance-engineer.md   # Daan — Runtime performance at scale
+├── database-specialist.md    # Sophie — Schema, migrations, data integrity
+├── security-engineer.md      # Eva — OWASP, access control, threat modeling
+├── plan.md                   # Thomas — Implementation planning (zero code)
+├── feature.md                # Rick — Full-stack implementation
+├── fix.md                    # Karin — Root cause analysis, bug fixes
+├── test.md                   # Sanne — Test strategy, coverage improvement
+└── docs-sync.md              # Niels — Documentation sync (automatic)
+```
 
-## How Teams Work
+## How to Spawn Agents
 
-### 1. Task Arrives
-The Orchestrator (team lead) assesses the task and reads `CLAUDE.md`.
+```python
+# Single agent
+Agent(subagent_type: "plan", name: "thomas", prompt: "plan feature X")
 
-### 2. Team Assembly & Briefing
-The Orchestrator selects agents and briefs them with:
-- The task description and context
-- Their teammates' **handles** (references to other agent files)
-- The workflow and handoff sequence
-- Expectations: collaborate, review, discuss
+# Fan-out review (parallel)
+Agent(subagent_type: "security-engineer", name: "eva", prompt: "review this diff")
+Agent(subagent_type: "qa-lead", name: "mark", prompt: "review this diff")
+Agent(subagent_type: "ux-designer", name: "lisa", prompt: "review this diff")
 
-### 3. Collaborative Execution
-Agents work in phases. After each phase:
-- The producing agent presents its output
-- Teammates review and provide feedback (peer review)
-- Discussion happens if there are disagreements
-- The team reaches consensus (or the Orchestrator decides)
+# Send feedback to a running agent
+SendMessage(to: "thomas", message: "Sophie says add an index on user_id")
 
-### 4. Dedicated Review
-The Reviewer agent reviews code quality, security, and convention adherence.
-The Reviewer does NOT implement — they only review.
-Other agents also peer-review at checkpoints, but the Reviewer is the dedicated quality gate.
+# Parallel build in worktrees
+Agent(subagent_type: "feature", name: "rick-backend", isolation: "worktree", prompt: "build API")
+Agent(subagent_type: "feature", name: "rick-frontend", isolation: "worktree", prompt: "build UI")
+```
 
-### 5. Reports to Orchestrator
-Each agent reports: what was done, decisions made, and any unresolved concerns.
+## Workflow Patterns
 
-### 6. Final Review by Orchestrator
-The Orchestrator (team lead) reviews the aggregate output:
-- Quality, conventions, documentation
-- Resolved and unresolved disagreements
-- Overall coherence with user request
+### Pattern 1: Solo
+Single agent, simple task.
+```
+spawn feature("implement X")
+```
 
-### 7. Commit Authorization
-**Only the Orchestrator authorizes commits.** No agent may commit independently.
-This ensures all work is reviewed, documented, and approved before entering the codebase.
+### Pattern 2: Pipeline
+Sequential — output feeds into the next step.
+```
+spawn plan → await → spawn feature → spawn qa-lead("review")
+```
 
-### 8. Self-Improvement (MANDATORY)
-After task completion, every involved agent MUST:
-- Update its own `## Lessons Learned` section
-- Trigger `skills/doc-update.md` for documentation updates
-- Report improvements back to the orchestrator
+### Pattern 3: Fan-out Review
+One change, multiple reviewers in parallel.
+```
+spawn security-engineer("review diff")  ─┐
+spawn qa-lead("review diff")             ├─ gather → summary
+spawn ux-designer("review diff")         ─┘
+```
+
+### Pattern 4: Parallel Build
+Multiple developers, each on their own branch (worktree isolation).
+```
+spawn feature(name: "rick-1", isolation: "worktree", "build backend")
+spawn feature(name: "rick-2", isolation: "worktree", "build frontend")
+→ merge worktrees → spawn qa-lead("review whole")
+```
+
+### Pattern 5: Refinement
+Plan → expert review → feedback → final plan.
+```
+1. spawn plan(name: "thomas", "design feature X")
+2. parallel: database-specialist + performance-engineer review plan
+3. SendMessage feedback to thomas
+4. finalize → spawn feature
+```
+
+### Pattern 6: Full Team Sprint
+Large feature, complete team in phases.
+```
+Phase 1 (Plan):    plan → refinement with database-specialist + performance-engineer
+Phase 2 (Build):   feature × 2 parallel (worktrees)
+Phase 3 (Review):  security-engineer + qa-lead + ux-designer parallel
+Phase 4 (Polish):  fix (issues) → test (coverage)
+Phase 5 (Ship):    docs-sync + qa-lead (preflight)
+```
+
+## Team Consensus Protocol
+
+### Voting
+When agents need to reach consensus (design decisions, readiness checks, risk assessment):
+
+| Vote | Meaning |
+|------|---------|
+| **APPROVE** | No issues from my perspective |
+| **CONCERN** | Minor issues, can proceed with notes |
+| **BLOCK** | Critical issues, **[MUST]** be resolved first |
+
+**Consensus = zero BLOCKs + majority APPROVE.**
+
+- Sophie has **automatic BLOCK** on changes that compromise data integrity.
+- Eva has **automatic BLOCK** on CRITICAL security vulnerabilities.
+- Blockers **[MUST]** specify exactly what needs to change.
+- If consensus cannot be reached, the user makes the final call.
+
+### Estimation
+When the team estimates effort:
+1. Each agent estimates independently (prevents anchoring)
+2. Estimates shared simultaneously
+3. If estimates differ >2x → discussion round
+4. Final = team median + risk buffer from highest outlier
+5. Confidence: HIGH / MEDIUM / LOW always stated
+
+## Multi-Instance Rules
+
+| Agent | When Multiple? | Naming Convention |
+|-------|----------------|-------------------|
+| Rick (feature) | Parallel workflows | `rick-1`, `rick-2` or `rick-backend`, `rick-frontend` |
+| Karin (fix) | Multiple independent bugs | `karin-1`, `karin-2` |
+| Sanne (test) | Tests for multiple modules | `sanne-auth`, `sanne-api` |
+| Role agents | Rarely >1 each | Standard name |
 
 ## Creating a New Agent
 
 1. Copy `_template.md` to `<agent-name>.md`
-2. Fill in all sections — leave nothing as placeholder
-3. Assign skills from `skills/` (or create new ones)
-4. Add the agent to the table in `CLAUDE.md`
-5. Commit with `feat: add <agent-name> agent`
+2. Give the agent a name and persona
+3. Define working modes, rules, and output format
+4. Add to the agent table in `CLAUDE.md`
+5. Commit with `feat: add <name> agent`
 
-## Agent Design Principles
+## Design Principles
 
-- **Team-first** — Agents collaborate, they don't work in isolation
-- **Single responsibility** — Each agent does one thing well
-- **Skill-based** — Agents use skills for procedures, not inline logic
-- **Self-improving** — Every use makes the agent better
-- **Context-aware** — Agents always read `CLAUDE.md` for project state
-- **Composable** — Agents work together in teams
-- **Reusable** — Design agents for repeated use across tasks
-- **No solo commits** — Only the Orchestrator authorizes commits
+- **Team-first** — agents collaborate, review, and reach consensus
+- **Named personas** — consistent identity builds context over time
+- **Role vs Task** — advisors don't implement; executors don't make architecture decisions
+- **Self-improving** — every agent records lessons and detects repetition
+- **Generic** — agents work across any tech stack; project specifics go in configuration sections

@@ -1,7 +1,7 @@
 # Skill: Documentation Update
 
 > **Purpose:** MANDATORY post-task documentation update across all affected files
-> **Used by:** ALL agents (this is the most critical skill in the system)
+> **Used by:** Niels (Docs) — **[MANDATORY]** triggered after every task
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16

@@ -1,7 +1,7 @@
 # Skill: Refactor
 
 > **Purpose:** Safe code restructuring without changing behavior
-> **Used by:** Developer
+> **Used by:** Rick (Dev)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -17,7 +17,7 @@ Invoke this skill when:
 ## Input
 
 - Code to refactor and the reason for refactoring
-- Architect's design (if this is a planned refactor)
+- Thomas's plan (if this is a planned refactor)
 
 ## Procedure
 

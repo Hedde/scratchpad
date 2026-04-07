@@ -1,7 +1,7 @@
 # Skill: Test Generation
 
 > **Purpose:** Create comprehensive tests following project conventions
-> **Used by:** Tester
+> **Used by:** Sanne (Test)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
