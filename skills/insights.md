@@ -106,6 +106,25 @@ Quick sweep (full audit uses `skills/doc-audit.md`):
 - Check if ADRs exist for significant decisions
 - Compare `CLAUDE.md` state to actual project state
 
+### Step 6b: Quality Self-Assessment
+
+Assess project health against the Quality Framework in CLAUDE.md:
+
+| Dimension | Check |
+|-----------|-------|
+| **Definition of Done** | Is the DoD checklist being consistently applied? Any items routinely skipped? |
+| **Traceability** | Do features have docs → implementation → tests chain? Any gaps? |
+| **Technical Debt** | Is debt visible and logged? Is ~10% effort going to debt reduction? Or is it accumulating silently? |
+| **Quality Dimensions** | Are all 7 dimensions being checked during reviews? Any dimension consistently ignored? |
+| **Quality Hooks** | Are PostToolUse and Stop hooks configured and working? Any false positives/negatives? |
+| **Path Rules** | Do rules exist for all major code areas? Any rules outdated? |
+
+Actions:
+- DoD items routinely skipped → investigate why, simplify or enforce
+- Missing traceability → flag features without docs or tests
+- Debt accumulating → recommend dedicated debt sprint
+- Dimension ignored → remind relevant agent, adjust review patterns
+
 ### Step 7: Produce Insights Report
 
 ```
@@ -129,6 +148,12 @@ Agent Tuning:
 
 Documentation Gaps:
   → [gap description]
+
+Quality Self-Assessment:
+  DoD compliance:    [consistently applied / gaps in ...]
+  Traceability:      [complete / missing docs for ... / missing tests for ...]
+  Technical debt:    [under control / accumulating in ...]
+  Review dimensions: [all covered / ... dimension underserved]
 
 Pending Improvements:
   → [improvement from backlog that should be prioritized]

@@ -263,6 +263,8 @@ When updating, hit ALL of these:
 | Conventions | `CLAUDE.md` → Conventions, `docs/development/code-organization.md` |
 | Agent config | All files in `agents/` → Project-Specific Configuration |
 | Skill config | All files in `skills/` → Project-Specific Notes |
+| Path-specific rules | `.claude/rules/` → create rule files per stack layer (models, views, migrations, tests) |
+| Quality hooks | `.claude/settings.json` → configure PostToolUse (formatter) and Stop (format + lint + compile) |
 
 ## Output
 
@@ -270,6 +272,8 @@ When updating, hit ALL of these:
 - All docs populated with project-specific information
 - All agents configured for this tech stack
 - All skills configured for this tech stack
+- Path-specific rules created for each layer of the stack
+- Quality hooks configured with project-specific formatter, linter, and compiler commands
 - Zero remaining `[NOT YET CONFIGURED]` markers (that could be filled)
 
 ## Quality Criteria

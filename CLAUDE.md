@@ -17,6 +17,31 @@
 4. **[SHOULD] Reuse agents.** Before creating a new agent, check `agents/` for an existing one. If none fits, create one from `agents/_template.md`.
 5. **[SHOULD] Skills over inline logic.** Skills are composable procedures. Check `skills/` before writing inline logic.
 6. **[MUST] Self-improvement is continuous.** Every agent, skill, and doc improves itself after use. Record what worked, what failed, and what to do differently.
+7. **[SHOULD] Not overly defensive.** Validate at system boundaries (user input, external APIs), but trust internal code and framework guarantees. No error handling for scenarios that can't happen, no fallbacks for hypothetical cases. Follow real code paths.
+8. **[MUST] Copy existing patterns first.** Before building anything, find a similar feature/page in the codebase and copy its approach. When in doubt, ask the user.
+
+---
+
+## Approach Selection
+
+> These rules prevent the #1 cause of wasted time: choosing the wrong approach.
+
+- **Copy existing patterns first** — ALWAYS find a similar feature/page in the codebase and copy its approach. Ask the user if unsure
+- **Server-side first** — NEVER use client-side workarounds (JS hacks, inline event handlers) when a server-side solution is possible
+- **No hardcoding** — if something should be configurable or dynamic, design it that way from the start. Don't hardcode first and refactor later
+- **Minimal fix** — for bugs: fix the specific problem, not the surrounding code. A placeholder text fix doesn't need an architectural analysis
+- **UI: propose BEFORE implementing** — for EVERY UI/styling change: describe in 1-2 sentences what you'll do and wait for confirmation. First attempts often miss the mark
+- **Unknown UX pattern? ASK — don't guess** — if there's no documented pattern or similar screen, present concrete options to the user. Record the decision so the question isn't asked again
+
+## Output-First Workflow
+
+> Sessions fail when the agent reads too long without producing anything. Produce output quickly, iterate.
+
+- **Read, then produce** — after initial orientation: state your approach in 3 bullets, then continue reading if needed
+- **Bug fix**: diagnosis + fix proposal BEFORE scanning the entire codebase
+- **Planning**: start writing as soon as you know enough, mark unknowns as `[OPEN]` instead of reading more files
+- **When in doubt: ask the user** instead of reading more files
+- **Never >10 file reads without writing something** — if you've read 10 files and haven't produced output, you're over-researching
 
 ---
 
@@ -71,6 +96,26 @@ In both cases:
 ## Development
 
 [NOT YET CONFIGURED] — See [docs/development/workflow.md](docs/development/workflow.md)
+
+## Path-Specific Rules
+
+`.claude/rules/` contains convention files with glob frontmatter. They load automatically when editing matching files — more efficient than putting everything in CLAUDE.md. Use `_template.md` to create new rules.
+
+| Rule file | Globs | What it enforces |
+|-----------|-------|-----------------|
+| [NOT YET CONFIGURED] | [after bootstrap] | [after bootstrap] |
+
+> **After bootstrap:** create rules for each layer of your stack (e.g., models, views, migrations, tests).
+> Each rule file should only contain conventions relevant to that file type.
+
+## Quality Hooks
+
+`.claude/settings.json` contains automated quality gates:
+
+- **PostToolUse** (Edit/Write) — auto-formats after every file edit. [NOT YET CONFIGURED] after bootstrap.
+- **Stop** — runs format check + compile/lint + static analysis when the session ends. [NOT YET CONFIGURED] after bootstrap.
+
+> **After bootstrap:** configure these hooks with your project's formatter, compiler, and linter commands.
 
 ## Conventions
 
@@ -204,6 +249,40 @@ Agent(subagent_type: "feature", name: "rick-backend", isolation: "worktree", pro
 Agent(subagent_type: "feature", name: "rick-frontend", isolation: "worktree", prompt: "build UI")
 ```
 
+### Development Lifecycle
+
+Every significant change follows these phases. Not every task needs all phases — a small bug fix can start at Build.
+
+```
+  PLAN          BUILD         VERIFY        REVIEW        SHIP
+┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐
+│ Thomas  │──▸│  Rick   │──▸│ Sanne  │──▸│ Mark    │──▸│  User   │
+│  Plan   │   │  Code   │   │  Test  │   │ Lisa    │   │ Commit  │
+│         │   │  Impl   │   │  Debug │   │ Eva     │   │  Push   │
+└─────────┘   └─────────┘   └─────────┘   └─────────┘   └─────────┘
+```
+
+| Phase | Who | Quality Gate |
+|-------|-----|-------------|
+| **Plan** | Thomas (plan) | User approves plan |
+| **Build** | Rick (feature) / Karin (fix) | Compiles without warnings (automated via PostToolUse hook) |
+| **Verify** | Sanne (test) | Tests green, coverage adequate |
+| **Review** | Mark + Lisa + Eva (parallel) | No BLOCKs, majority APPROVE |
+| **Ship** | User | Format + lint + compile clean (automated via Stop hook) |
+
+**Quality gates at Build and Ship are automated via hooks** — see `.claude/settings.json`. This means agents get immediate feedback on formatting and compile errors without manual intervention.
+
+### Parallel Agent Isolation
+
+When multiple agents work in parallel on non-overlapping files **without** worktree isolation:
+
+- **NEVER touch others' files** — no resets, fixes, or formatting on files you didn't change. This also applies to the orchestrator: if an agent breaks something, report to the user and **wait for instructions**. NEVER run `git checkout` or edits on another agent's files.
+- **Report and wait** — if you hit a compile/lint error in someone else's file: report which file, which error, which agent likely caused it, and WAIT.
+- **Format only your own files** — run the formatter only on files you changed, not project-wide (project-wide formatting breaks on syntax errors from other agents).
+- **Compile errors from others block you?** — report to the user. Do NOT try to fix it yourself.
+
+This prevents agents from overwriting each other's work or making conflicting fixes.
+
 ### Auto-Improvement Protocol
 
 > **[MUST]** — This is the mechanism that makes agents smarter over time.
@@ -302,6 +381,62 @@ See:
 
 ---
 
+## Quality Framework
+
+> Inspired by ICTU Kwaliteitsaanpak and ISO 25010. Defines what "done" means and how quality is measured.
+
+### Quality Dimensions
+
+Every change is evaluated across these dimensions. Not every dimension applies to every change — use judgment.
+
+| Dimension | What to check | Who checks |
+|-----------|--------------|------------|
+| **Correctness** | Does it do what it should? Edge cases handled? | Mark (QA) |
+| **Security** | OWASP Top 10, access control, injection, data leaks? | Eva (Security) |
+| **Performance** | N+1 queries, unnecessary computation, payload sizes? | Daan (Performance) |
+| **Usability** | Consistent with UI patterns, intuitive, responsive? | Lisa (UX) |
+| **Accessibility** | WCAG basics, keyboard navigation, screen reader? | Lisa (UX) |
+| **Maintainability** | Complexity, module size, naming, code organization? | Mark (QA) |
+| **Data integrity** | Constraints, migrations safe, rollback possible? | Sophie (DB) |
+
+### Definition of Done
+
+A task is **done** when ALL applicable items are true:
+
+- [ ] Code compiles without warnings
+- [ ] Formatter and linter pass (automated via hooks)
+- [ ] Tests exist and pass for new/changed behavior
+- [ ] Both happy path and error paths are tested
+- [ ] Permission checks verified in frontend AND backend
+- [ ] No security vulnerabilities introduced (OWASP Top 10)
+- [ ] Documentation updated (feature docs, help context, inline where non-obvious)
+- [ ] UI changes match existing patterns (or new pattern documented)
+- [ ] No hardcoded values that should be configurable
+- [ ] Technical debt identified and logged (not necessarily resolved)
+
+> **Adapt this list:** After bootstrap, add project-specific items (e.g., migration rollback tested, accessibility checked).
+
+### Traceability
+
+> Every requirement should be traceable through implementation to tests.
+
+- **Requirements → Implementation**: feature docs in `docs/features/` describe what should exist; code implements it
+- **Implementation → Tests**: every module has corresponding test coverage; tests verify documented behavior
+- **Tests → Requirements**: test descriptions reference the behavior they verify, not implementation details
+
+When adding a feature: write the feature doc first, implement second, test third. This creates natural traceability.
+
+### Technical Debt Management
+
+Technical debt is normal and acceptable — but it must be **visible** and **planned**.
+
+- **Make it visible** — when you encounter or introduce tech debt, log it (TODO with context, or issue)
+- **Don't hide it** — a known shortcut is better than a hidden one. Comment WHY the shortcut was taken
+- **Plan payoff** — reserve ~10% of effort for debt reduction. Don't let it accumulate silently
+- **Distinguish debt types**: intentional shortcuts (acceptable) vs. accidental mess (fix now)
+
+---
+
 ## Self-Improvement Protocol
 
 > **This section governs how the entire system evolves.** Every agent, skill, and doc follows this.
@@ -369,8 +504,10 @@ The insights skill scans all agent Repetition Logs, Lessons Learned, and Skill I
 5. Is the UI approach consistent with documented patterns?
 
 **After** implementing any feature — **[MUST]** verify:
-1. Were all docs updated? (This is **[MANDATORY]**, check again.)
-2. Were agent gotchas and lessons updated?
-3. Were skill improvements logged?
-4. Does CLAUDE.md reflect the current state?
-5. Did all agents vote? Is consensus reached?
+1. Definition of Done checklist passes (see Quality Framework above)
+2. Were all docs updated? (This is **[MANDATORY]**, check again.)
+3. Were agent gotchas and lessons updated?
+4. Were skill improvements logged?
+5. Does CLAUDE.md reflect the current state?
+6. Did all agents vote? Is consensus reached?
+7. Was technical debt introduced? If yes, is it logged and visible?
