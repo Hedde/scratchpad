@@ -1,7 +1,7 @@
 # Project Blueprint — Orchestrator Trigger File
 
 > **This file is the AI assistant's command center.** It routes every task to the right agents, skills, and documentation.
-> This file is self-improving: after every completed task, update this file and relevant docs.
+> The file is self-improving: after every completed task, update this file and relevant docs.
 > Keep it concise — deep knowledge lives in `docs/`, agents in `agents/`, skills in `skills/`.
 
 ---
@@ -11,14 +11,14 @@
 > Rules use RFC 2119 keywords: **[MUST]** = mandatory, **[SHOULD]** = recommended unless justified,
 > **[COULD]** = optional, **[MUST NOT]** = prohibited.
 
-1. **[MUST] Documentation updates after every task.** No exceptions — update all relevant docs, this file, and any agent/skill that was involved. This is not optional. This is not "when appropriate." This is ALWAYS.
+1. **[MUST] Documentation updates after every task.** Update all relevant docs, this file, and any agent/skill that was involved. Not optional.
 2. **[MUST] Never leave `[NOT YET CONFIGURED]` after learning the answer.** Fill it in immediately.
-3. **[MUST] Agents auto-improve on correction.** When an agent is corrected on a mistake or gotcha, it **[MUST]** update its own agent file: add to `## Gotchas` and `## Lessons Learned`. This is non-negotiable.
-4. **[SHOULD] Reuse agents.** Before creating a new agent, check `agents/` for an existing one. If none fits, create one from `agents/_template.md`.
-5. **[SHOULD] Skills over inline logic.** Skills are composable procedures. Check `skills/` before writing inline logic.
-6. **[MUST] Self-improvement is continuous.** Every agent, skill, and doc improves itself after use. Record what worked, what failed, and what to do differently.
-7. **[SHOULD] Not overly defensive.** Validate at system boundaries (user input, external APIs), but trust internal code and framework guarantees. No error handling for scenarios that can't happen, no fallbacks for hypothetical cases. Follow real code paths.
-8. **[MUST] Copy existing patterns first.** Before building anything, find a similar feature/page in the codebase and copy its approach. When in doubt, ask the user.
+3. **[MUST] Agents auto-improve on correction.** When corrected on a mistake or gotcha, the agent **[MUST]** update its own file: `## Gotchas` and `## Lessons Learned`.
+4. **[SHOULD] Reuse agents.** Before creating a new agent, check `agents/`. If none fits, create one from `agents/_template.md`.
+5. **[SHOULD] Skills over inline logic.** Check `skills/` before writing inline procedures.
+6. **[MUST] Self-improvement is continuous.** Every agent, skill, and doc improves itself after use.
+7. **[SHOULD] Not overly defensive.** Validate at system boundaries (user input, external APIs), trust internal code and framework guarantees. No error handling for impossible scenarios.
+8. **[MUST] Copy existing patterns first.** Find a similar feature/page and copy its approach. When in doubt, ask the user.
 
 ---
 
@@ -26,52 +26,28 @@
 
 > These rules prevent the #1 cause of wasted time: choosing the wrong approach.
 
-- **Copy existing patterns first** — ALWAYS find a similar feature/page in the codebase and copy its approach. Ask the user if unsure
-- **Server-side first** — NEVER use client-side workarounds (JS hacks, inline event handlers) when a server-side solution is possible
-- **No hardcoding** — if something should be configurable or dynamic, design it that way from the start. Don't hardcode first and refactor later
-- **Minimal fix** — for bugs: fix the specific problem, not the surrounding code. A placeholder text fix doesn't need an architectural analysis
-- **UI: propose BEFORE implementing** — for EVERY UI/styling change: describe in 1-2 sentences what you'll do and wait for confirmation. First attempts often miss the mark
-- **Unknown UX pattern? ASK — don't guess** — if there's no documented pattern or similar screen, present concrete options to the user. Record the decision so the question isn't asked again
+- **Copy existing patterns first** — ALWAYS find similar code and copy its approach.
+- **Server-side first** — NEVER use client-side workarounds when a server-side solution is possible.
+- **No hardcoding** — configurable/dynamic things must be designed that way from the start.
+- **Minimal fix** — for bugs: fix the specific problem, not the surrounding code.
+- **UI: propose BEFORE implementing** — describe in 1-2 sentences, wait for confirmation.
+- **Unknown UX pattern? ASK — don't guess** — present concrete options, record the decision.
 
 ## Output-First Workflow
 
-> Sessions fail when the agent reads too long without producing anything. Produce output quickly, iterate.
+> Produce output quickly, iterate. Sessions fail when you read too long without producing.
 
-- **Read, then produce** — after initial orientation: state your approach in 3 bullets, then continue reading if needed
-- **Bug fix**: diagnosis + fix proposal BEFORE scanning the entire codebase
-- **Planning**: start writing as soon as you know enough, mark unknowns as `[OPEN]` instead of reading more files
-- **When in doubt: ask the user** instead of reading more files
-- **Never >10 file reads without writing something** — if you've read 10 files and haven't produced output, you're over-researching
+- **Read, then produce** — after initial orientation: state your approach in 3 bullets.
+- **Bug fix**: diagnosis + fix proposal BEFORE scanning the entire codebase.
+- **Planning**: start writing as soon as you know enough, mark unknowns as `[OPEN]`.
+- **When in doubt: ask the user** instead of reading more files.
+- **Never >10 file reads without writing something.**
 
 ---
 
-## Bootstrap: Auto-Discovery Protocol
+## Bootstrap
 
-> The bootstrap process is itself a skill: `skills/bootstrap-interview.md`
-> It handles BOTH existing and new projects automatically.
-
-**If any section is marked `[NOT YET CONFIGURED]`, the bootstrap MUST run before work begins.**
-
-### How Bootstrap Works
-
-The bootstrap skill **first detects** whether this is an existing or new project:
-
-**Existing project detected** (source files, package manifests, configs found):
-1. **Discover first, ask later** — scan the entire codebase for tech stack, patterns, conventions, commands
-2. **Present a discovery report** — show findings to the user: "I found X, Y, Z — is this correct?"
-3. **User confirms or corrects** — only ask questions about things that couldn't be discovered
-4. Update all docs, agents, and skills with confirmed information
-
-**New project detected** (no source code found):
-1. **Decisions first** — nothing to discover, so interview the user about all choices
-2. Ask about purpose, tech stack, environment, conventions, deployment
-3. Update all docs, agents, and skills with decided information
-
-In both cases:
-- Immediately update this file, all docs, all agents, all skills
-- Configure project-specific agent behavior and skill procedures
-- Create stack-specific agents/skills if needed
-- Never leave a section unconfigured after learning the answer
+If any section below is marked `[NOT YET CONFIGURED]`, run `skills/bootstrap-interview.md` before work begins. Bootstrap auto-detects existing vs. new projects and fills in the gaps.
 
 ---
 
@@ -89,38 +65,34 @@ In both cases:
 
 [NOT YET CONFIGURED] — Auto-populated after bootstrap.
 
-```
-# Updated automatically as the project takes shape.
-```
-
 ## Development
 
 [NOT YET CONFIGURED] — See [docs/development/workflow.md](docs/development/workflow.md)
 
 ## Path-Specific Rules
 
-`.claude/rules/` contains convention files with glob frontmatter. They load automatically when editing matching files — more efficient than putting everything in CLAUDE.md. Use `_template.md` to create new rules.
+`.claude/rules/` contains convention files with glob frontmatter. They load automatically when editing matching files — more efficient than inlining everything in CLAUDE.md. Use `_template.md` to create new rules.
 
 | Rule file | Globs | What it enforces |
-|-----------|-------|-----------------|
-| [NOT YET CONFIGURED] | [after bootstrap] | [after bootstrap] |
+|-----------|-------|------------------|
+| [NOT YET CONFIGURED] | `e.g. lib/**/*.ex` | `e.g. Elixir code style, Credo rules` |
+| [NOT YET CONFIGURED] | `e.g. test/**/*.exs` | `e.g. Test structure, factory patterns` |
+| [NOT YET CONFIGURED] | `e.g. migrations/*` | `e.g. Migration safety, rollback rules` |
 
-> **After bootstrap:** create rules for each layer of your stack (e.g., models, views, migrations, tests).
-> Each rule file should only contain conventions relevant to that file type.
+> **After bootstrap:** create one rule file per layer (models, views, migrations, tests).
 
 ## Quality Hooks
 
 `.claude/settings.json` contains automated quality gates:
 
-- **PostToolUse** (Edit/Write) — auto-formats after every file edit. [NOT YET CONFIGURED] after bootstrap.
-- **Stop** — runs format check + compile/lint + static analysis when the session ends. [NOT YET CONFIGURED] after bootstrap.
+- **PostToolUse** (Edit/Write) — auto-formats after every edit. [NOT YET CONFIGURED] after bootstrap.
+- **Stop** — runs format check + compile/lint + static analysis at session end. **Alternative**: use a git pre-commit hook instead of a Stop hook — that keeps quality checks out of Claude's context and only runs them when it matters (at commit time).
 
-> **After bootstrap:** configure these hooks with your project's formatter, compiler, and linter commands.
+> **After bootstrap:** configure hooks with your project's formatter, compiler, and linter commands.
 
 ## Conventions
 
 > Conventions are discovered and codified. When a pattern works twice, it becomes a convention.
-> Document here (summary) and in `docs/` (detail). This is **[MANDATORY]**.
 
 ### Code Style
 [NOT YET CONFIGURED] — See [docs/development/code-organization.md](docs/development/code-organization.md)
@@ -143,31 +115,16 @@ In both cases:
 
 ---
 
-## Agent System — Named Team
+## Agent System
 
-> Named specialist agents that work in **teams**. Role agents advise and review. Task agents
-> plan, build, fix, test, and document. The user orchestrates.
-> See [agents/README.md](agents/README.md) for full protocol and spawn examples.
+Named specialist agents work in **teams**. Role agents advise and review. Task agents plan, build, fix, test, document. The user orchestrates.
 
 ### The Team
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  ROLE AGENTS (Advisors — review, audit, recommend)          │
-│  Lisa (UX) · Mark (QA) · Daan (Perf) · Sophie (DB) · Eva   │
-├─────────────────────────────────────────────────────────────┤
-│  TASK AGENTS (Executors — plan, build, fix, test, document) │
-│  Thomas (Plan) · Rick (Dev) · Karin (Fix) · Sanne (Test)   │
-│  Niels (Docs)                                               │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Available Agents
 
 | Name | File | Type | Focus |
 |------|------|------|-------|
 | **Lisa** | [agents/ux-designer.md](agents/ux-designer.md) | Role | UI consistency, accessibility, responsive design |
-| **Mark** | [agents/qa-lead.md](agents/qa-lead.md) | Role | Production readiness, 5 quality dimensions |
+| **Mark** | [agents/qa-lead.md](agents/qa-lead.md) | Role | Production readiness, quality dimensions |
 | **Daan** | [agents/performance-engineer.md](agents/performance-engineer.md) | Role | Runtime performance at scale |
 | **Sophie** | [agents/database-specialist.md](agents/database-specialist.md) | Role | Schema, migrations, data integrity |
 | **Eva** | [agents/security-engineer.md](agents/security-engineer.md) | Role | OWASP Top 10, access control, threat modeling |
@@ -177,195 +134,91 @@ In both cases:
 | **Sanne** | [agents/test.md](agents/test.md) | Task | Test strategy, coverage improvement |
 | **Niels** | [agents/docs-sync.md](agents/docs-sync.md) | Task | Documentation sync (automatic) |
 
-> **To add a new agent:** Copy `agents/_template.md`, give it a name and persona, add a row here.
+> **To add a new agent:** copy `agents/_template.md`, give it a name and persona, add a row here.
 
-### Team Assembly Patterns
+### Collaboration
 
-| Task Type | Team | Workflow |
-|-----------|------|----------|
-| New feature | Thomas → Rick + Sanne + fan-out review (Mark, Lisa, Eva) + Niels | Plan → Build → Test → Review → Docs |
-| Bug fix | Karin + Sanne + Mark + Niels | Diagnose → Fix → Regression test → Preflight → Docs |
-| Refactor | Thomas → Rick + Mark + Niels | Plan → Refactor → Quality review → Docs |
-| Database change | Thomas → Sophie review → Rick + Daan review + Niels | Plan → Schema review → Build → Perf review → Docs |
-| Security-sensitive | Thomas → Eva threat model → Rick + Eva review + Mark + Niels | Plan → Threat model → Build → Security review → Docs |
-| UI feature | Thomas → Lisa design → Rick + Lisa review + Mark + Niels | Plan → UX design → Build → UX review → Docs |
-| Performance issue | Daan audit → Karin/Rick + Daan verify | Audit → Fix → Verify improvement |
-| Code review (PR) | Fan-out: Eva + Mark + Lisa → gather | Parallel review → Consensus → Summary |
+For team protocols (workflow patterns, voting, consensus, multi-instance rules, SendMessage, parallel isolation): see **[agents/README.md](agents/README.md)**.
 
-### Collaboration Protocol
-
-#### [MUST] Rules
-- **Voting at every checkpoint** — agents vote APPROVE / CONCERN / BLOCK on each other's output
-- **Role agents [MUST NOT] implement** — they advise, review, and recommend only
-- **Every correction triggers auto-improve** — agent [MUST] update its own file with the lesson
-- **Niels runs after every task** — documentation sync is automatic and mandatory
-- **Repetition detection** — 2nd manual occurrence → agent [MUST] propose a skill
-
-#### [SHOULD] Guidelines
-- **Discussion before consensus** — agents [SHOULD] debate approaches and raise concerns
-- **Fan-out for reviews** — multiple role agents [SHOULD] review in parallel, not sequentially
-- **Present approach before building** — Rick [SHOULD] describe his plan in 3 bullets before multi-file changes
-
-### Voting Protocol
-
-When agents need to reach consensus (design decisions, readiness checks, risk assessments):
-
-| Vote | Meaning | Blocks? |
-|------|---------|---------|
-| **APPROVE** | No issues from my perspective | No |
-| **CONCERN** | Minor issues, can proceed with notes | No |
-| **BLOCK** | Critical issues, [MUST] be resolved first | **Yes** |
-
-**Consensus = zero BLOCKs + majority APPROVE.**
-- Sophie and Eva have **automatic BLOCK** on data integrity and CRITICAL security issues respectively.
-- Blockers [MUST] specify exactly what needs to change.
-- If consensus cannot be reached, the user makes the final call.
-
-### Estimation Protocol
-
-When the team estimates effort:
-1. Each agent estimates independently from their perspective (prevents anchoring)
-2. Estimates [MUST] be shared simultaneously
-3. If estimates differ >2x → discussion round to understand why
-4. Final estimate = team median + risk buffer from highest outlier
-5. Confidence level [MUST] always be stated: HIGH / MEDIUM / LOW
-
-### Agent Communication
-
-```python
-# Spawn with name
-Agent(subagent_type: "plan", name: "thomas", prompt: "design feature X")
-
-# Send message to running agent
-SendMessage(to: "thomas", message: "Sophie recommends adding an index on user_id")
-
-# Fan-out review
-Agent(subagent_type: "security-engineer", name: "eva", prompt: "review diff")
-Agent(subagent_type: "qa-lead", name: "mark", prompt: "review diff")
-Agent(subagent_type: "ux-designer", name: "lisa", prompt: "review diff")
-
-# Parallel build in worktrees
-Agent(subagent_type: "feature", name: "rick-backend", isolation: "worktree", prompt: "build API")
-Agent(subagent_type: "feature", name: "rick-frontend", isolation: "worktree", prompt: "build UI")
-```
+For reusable prompt templates (docs-audit, pr-review, feature-build, refactor-plan): see **[agent-briefs/](agent-briefs/README.md)** — saves 2-3k tokens per sprint versus writing briefs from scratch.
 
 ### Development Lifecycle
-
-Every significant change follows these phases. Not every task needs all phases — a small bug fix can start at Build.
 
 ```
   PLAN          BUILD         VERIFY        REVIEW        SHIP
 ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐
-│ Thomas  │──▸│  Rick   │──▸│ Sanne  │──▸│ Mark    │──▸│  User   │
-│  Plan   │   │  Code   │   │  Test  │   │ Lisa    │   │ Commit  │
-│         │   │  Impl   │   │  Debug │   │ Eva     │   │  Push   │
+│ Thomas  │──▸│  Rick   │──▸│ Sanne   │──▸│ Mark    │──▸│  User   │
+│  Plan   │   │  Code   │   │  Test   │   │ Lisa    │   │ Commit  │
+│         │   │  Impl   │   │  Debug  │   │ Eva     │   │  Push   │
 └─────────┘   └─────────┘   └─────────┘   └─────────┘   └─────────┘
 ```
 
 | Phase | Who | Quality Gate |
 |-------|-----|-------------|
-| **Plan** | Thomas (plan) | User approves plan |
-| **Build** | Rick (feature) / Karin (fix) | Compiles without warnings (automated via PostToolUse hook) |
-| **Verify** | Sanne (test) | Tests green, coverage adequate |
+| **Plan** | Thomas | User approves plan |
+| **Build** | Rick / Karin | Compiles without warnings (automated) |
+| **Verify** | Sanne | Tests green, coverage adequate |
 | **Review** | Mark + Lisa + Eva (parallel) | No BLOCKs, majority APPROVE |
-| **Ship** | User | Format + lint + compile clean (automated via Stop hook) |
+| **Ship** | User | See [docs/development/dod.md](docs/development/dod.md) |
 
-**Quality gates at Build and Ship are automated via hooks** — see `.claude/settings.json`. This means agents get immediate feedback on formatting and compile errors without manual intervention.
-
-### Parallel Agent Isolation
-
-When multiple agents work in parallel on non-overlapping files **without** worktree isolation:
-
-- **NEVER touch others' files** — no resets, fixes, or formatting on files you didn't change. This also applies to the orchestrator: if an agent breaks something, report to the user and **wait for instructions**. NEVER run `git checkout` or edits on another agent's files.
-- **Report and wait** — if you hit a compile/lint error in someone else's file: report which file, which error, which agent likely caused it, and WAIT.
-- **Format only your own files** — run the formatter only on files you changed, not project-wide (project-wide formatting breaks on syntax errors from other agents).
-- **Compile errors from others block you?** — report to the user. Do NOT try to fix it yourself.
-
-This prevents agents from overwriting each other's work or making conflicting fixes.
-
-### Auto-Improvement Protocol
-
-> **[MUST]** — This is the mechanism that makes agents smarter over time.
-
-When an agent is corrected on a mistake, gotcha, or suboptimal approach:
-
-1. **[MUST] Update `## Gotchas`** in its own agent file — add the specific pitfall with context
-2. **[MUST] Update `## Lessons Learned`** — record what happened and the correct approach
-3. **[SHOULD] Check for pattern** — is this a gotcha that affects other agents too?
-4. **[SHOULD] Propose skill** — if this is the 2nd occurrence, propose a reusable skill
-
-Format for gotcha entries:
-```markdown
-## Gotchas
-- **[SHORT TITLE]** — [what goes wrong] → [correct approach]. Discovered: [date]
-```
-
-This ensures agents never make the same mistake twice.
+Not every task needs all phases — small bug fixes can start at Build.
 
 ---
 
 ## Skill System
 
-> Skills are composable procedures. They can be invoked by the orchestrator, by agents, or directly.
-> Skills are self-improving: after each use, the skill file is updated with lessons learned.
-> See [skills/README.md](skills/README.md) for the full skill catalog.
+> Skills are composable procedures. Invoked by the orchestrator, by agents, or directly.
+> See [skills/README.md](skills/README.md) for the full catalog.
 
-### Available Skills
+| Skill | File | Purpose |
+|-------|------|---------|
+| Bootstrap | [skills/bootstrap-interview.md](skills/bootstrap-interview.md) | Project setup, tech stack discovery |
+| Implementation | [skills/implement.md](skills/implement.md) | Feature implementation workflow |
+| Code Review | [skills/code-review.md](skills/code-review.md) | Structured code review |
+| Design Review | [skills/design-review.md](skills/design-review.md) | Architecture evaluation |
+| Test Generation | [skills/test-generate.md](skills/test-generate.md) | Test creation & strategy |
+| Coverage Check | [skills/coverage-check.md](skills/coverage-check.md) | Coverage analysis |
+| Debug | [skills/debug.md](skills/debug.md) | Systematic debugging |
+| Refactor | [skills/refactor.md](skills/refactor.md) | Safe refactoring |
+| Doc Update | [skills/doc-update.md](skills/doc-update.md) | **[MANDATORY]** post-task documentation |
+| Doc Audit | [skills/doc-audit.md](skills/doc-audit.md) | Documentation completeness check |
+| ADR Create | [skills/adr-create.md](skills/adr-create.md) | Architecture Decision Record |
+| Security Audit | [skills/security-audit.md](skills/security-audit.md) | Security vulnerability check |
+| Sprint Retro | [skills/sprint-retro.md](skills/sprint-retro.md) | Immediate post-sprint learning capture |
+| Insights | [skills/insights.md](skills/insights.md) | Periodic system tuning via `/loop` |
 
-| Skill | File | Used By | Purpose |
-|-------|------|---------|---------|
-| Bootstrap Interview | [skills/bootstrap-interview.md](skills/bootstrap-interview.md) | User | Project setup, tech stack discovery |
-| Code Review | [skills/code-review.md](skills/code-review.md) | Mark (QA) | Structured code review process |
-| Design Review | [skills/design-review.md](skills/design-review.md) | Thomas (Plan) | Architecture & design evaluation |
-| Implementation | [skills/implement.md](skills/implement.md) | Rick (Dev) | Feature implementation workflow |
-| Test Generation | [skills/test-generate.md](skills/test-generate.md) | Sanne (Test) | Test creation & coverage strategy |
-| Documentation Update | [skills/doc-update.md](skills/doc-update.md) | Niels (Docs) | **[MANDATORY]** post-task documentation |
-| Refactor | [skills/refactor.md](skills/refactor.md) | Rick (Dev) | Safe refactoring with verification |
-| Debug | [skills/debug.md](skills/debug.md) | Karin (Fix) | Systematic debugging process |
-| ADR Create | [skills/adr-create.md](skills/adr-create.md) | Thomas (Plan) | Architecture Decision Record creation |
-| Security Audit | [skills/security-audit.md](skills/security-audit.md) | Eva (Security) | Security vulnerability assessment |
-| Coverage Check | [skills/coverage-check.md](skills/coverage-check.md) | Sanne (Test) | Test coverage analysis |
-| Doc Audit | [skills/doc-audit.md](skills/doc-audit.md) | Niels (Docs) | Documentation completeness check |
-| Insights | [skills/insights.md](skills/insights.md) | User | Periodic system tuning via `/loop` |
-
-> **To add a new skill:** Copy `skills/_template.md`, fill it in, add a row to this table.
+> **To add a new skill:** copy `skills/_template.md`, fill it in, add a row here.
 >
-> **Periodic tuning:** Run `/loop 4h /insights` during active development to auto-detect repetitive patterns, promote conventions, and tune agent performance.
+> **Periodic tuning:** run `/loop 4h /insights` during active development. Run `/sprint-retro` immediately after each completed sprint.
 
 ---
 
-## Documentation Map (Trigger Reference)
+## Documentation Map
 
 > When working on a task, consult the relevant docs AND the relevant agents/skills.
 
 | When working on... | Consult Docs | Agents | Skills |
 |--------------------|-------------|--------|--------|
-| New project setup | All docs | User (runs bootstrap) | `bootstrap-interview` |
+| New project setup | All docs | User (bootstrap) | `bootstrap-interview` |
 | New feature | [Feature Checklist](docs/getting-started/new-feature-checklist.md) | Thomas → Rick + Sanne + reviewers | `implement`, `test-generate` |
 | Database changes | [Database](docs/architecture/database.md), [Migrations](docs/development/migrations.md) | Thomas → Sophie → Rick | `implement` |
 | Architecture decisions | [Decision Records](docs/decisions/) | Thomas + Sophie + Daan | `design-review`, `adr-create` |
-| Code structure | [Code Organization](docs/development/code-organization.md) | Rick | `implement` |
-| Writing tests | [Testing Strategy](docs/development/testing.md) | Sanne | `test-generate`, `coverage-check` |
+| Writing tests | [Testing](docs/development/testing.md) | Sanne | `test-generate`, `coverage-check` |
 | Code review | [Code Organization](docs/development/code-organization.md) | Mark + Eva + Lisa (fan-out) | `code-review`, `security-audit` |
 | UI work | [UI Patterns](docs/ui/patterns.md) | Lisa → Rick + Lisa review | `implement` |
-| Deployment | [Deployment](docs/operations/deployment.md) | — | — |
-| CI/CD | [CI/CD](docs/operations/ci.md) | — | — |
 | Bug fix | [Testing](docs/development/testing.md) | Karin + Sanne + Mark | `debug`, `test-generate` |
 | Refactoring | [Code Organization](docs/development/code-organization.md) | Thomas → Rick + Mark | `refactor`, `code-review` |
-| Performance issue | [Code Organization](docs/development/code-organization.md) | Daan → Rick/Karin + Daan verify | `debug`, `implement` |
+| Performance | [Code Organization](docs/development/code-organization.md) | Daan → Rick/Karin + Daan verify | `debug`, `implement` |
 | **After ANY task** | **All affected docs** | **Niels [MANDATORY]** | **`doc-update`** |
+| **End of sprint** | — | — | **`sprint-retro`** |
 
 ---
 
 ## Architecture Patterns
 
-> Document proven patterns here as they emerge. Link to `docs/architecture/` for deep dives.
-
 [NOT YET CONFIGURED] — Patterns will be documented as the project evolves.
 
-See:
-- [docs/architecture/database.md](docs/architecture/database.md)
-- [docs/architecture/](docs/architecture/)
+See [docs/architecture/](docs/architecture/).
 
 ## Deployment
 
@@ -383,131 +236,71 @@ See:
 
 ## Quality Framework
 
-> Inspired by ICTU Kwaliteitsaanpak and ISO 25010. Defines what "done" means and how quality is measured.
+> Inspired by ICTU Kwaliteitsaanpak and ISO 25010.
 
 ### Quality Dimensions
 
 Every change is evaluated across these dimensions. Not every dimension applies to every change — use judgment.
 
-| Dimension | What to check | Who checks |
-|-----------|--------------|------------|
-| **Correctness** | Does it do what it should? Edge cases handled? | Mark (QA) |
-| **Security** | OWASP Top 10, access control, injection, data leaks? | Eva (Security) |
-| **Performance** | N+1 queries, unnecessary computation, payload sizes? | Daan (Performance) |
-| **Usability** | Consistent with UI patterns, intuitive, responsive? | Lisa (UX) |
-| **Accessibility** | WCAG basics, keyboard navigation, screen reader? | Lisa (UX) |
-| **Maintainability** | Complexity, module size, naming, code organization? | Mark (QA) |
-| **Data integrity** | Constraints, migrations safe, rollback possible? | Sophie (DB) |
+| Dimension | Who checks |
+|-----------|------------|
+| **Correctness** — does it do what it should? | Mark (QA) |
+| **Security** — OWASP, access, data leaks | Eva (Security) |
+| **Performance** — N+1, computation, payloads | Daan (Performance) |
+| **Usability** — consistent, intuitive, responsive | Lisa (UX) |
+| **Accessibility** — WCAG, keyboard, screen reader | Lisa (UX) |
+| **Maintainability** — complexity, naming, organization | Mark (QA) |
+| **Data integrity** — constraints, migrations safe | Sophie (DB) |
 
 ### Definition of Done
 
-A task is **done** when ALL applicable items are true:
-
-- [ ] Code compiles without warnings
-- [ ] Formatter and linter pass (automated via hooks)
-- [ ] Tests exist and pass for new/changed behavior
-- [ ] Both happy path and error paths are tested
-- [ ] Permission checks verified in frontend AND backend
-- [ ] No security vulnerabilities introduced (OWASP Top 10)
-- [ ] Documentation updated (feature docs, help context, inline where non-obvious)
-- [ ] UI changes match existing patterns (or new pattern documented)
-- [ ] No hardcoded values that should be configurable
-- [ ] Technical debt identified and logged (not necessarily resolved)
-
-> **Adapt this list:** After bootstrap, add project-specific items (e.g., migration rollback tested, accessibility checked).
+See **[docs/development/dod.md](docs/development/dod.md)** — full checklist with MUST/SHOULD/MAY criteria and skip-policy. Agents reference this instead of carrying their own checklists.
 
 ### Traceability
 
-> Every requirement should be traceable through implementation to tests.
+Every requirement should be traceable through implementation to tests. Feature doc first → implementation → test. Test descriptions reference documented behavior, not implementation details.
 
-- **Requirements → Implementation**: feature docs in `docs/features/` describe what should exist; code implements it
-- **Implementation → Tests**: every module has corresponding test coverage; tests verify documented behavior
-- **Tests → Requirements**: test descriptions reference the behavior they verify, not implementation details
+### Technical Debt
 
-When adding a feature: write the feature doc first, implement second, test third. This creates natural traceability.
-
-### Technical Debt Management
-
-Technical debt is normal and acceptable — but it must be **visible** and **planned**.
-
-- **Make it visible** — when you encounter or introduce tech debt, log it (TODO with context, or issue)
-- **Don't hide it** — a known shortcut is better than a hidden one. Comment WHY the shortcut was taken
-- **Plan payoff** — reserve ~10% of effort for debt reduction. Don't let it accumulate silently
-- **Distinguish debt types**: intentional shortcuts (acceptable) vs. accidental mess (fix now)
+Debt is acceptable but must be **visible**:
+- Log when encountered (TODO + context, or issue)
+- Comment WHY shortcuts were taken
+- Reserve ~10% of effort for debt reduction
+- Distinguish intentional (acceptable) from accidental (fix now)
 
 ---
 
 ## Self-Improvement Protocol
 
-> **This section governs how the entire system evolves.** Every agent, skill, and doc follows this.
-
 ### [MANDATORY] Post-Task Updates
 
-After EVERY completed task, the following **[MUST]** happen:
+After EVERY completed task:
 
-1. **Niels runs `skills/doc-update.md`** — updates all affected documentation
-2. **Update CLAUDE.md** — if any section was affected, update it now
-3. **Agent auto-improve** — every agent involved **[MUST]** record what it learned:
-   - `## Gotchas` — new pitfalls discovered (with date and context)
-   - `## Lessons Learned` — what worked, what didn't, what to do differently
-4. **Skill improvement** — every skill used **[SHOULD]** update its `## Improvement Log`
-5. **Replace `[NOT YET CONFIGURED]`** — if information was discovered, fill it in immediately
-6. **Create feature docs** — for any new feature: `docs/features/<feature-name>.md`
-7. **Create ADRs** — for any architectural decision: `docs/decisions/NNN-title.md`
+1. **Niels runs `skills/doc-update.md`** — updates all affected documentation.
+2. **Update CLAUDE.md** — if any section was affected.
+3. **Agent auto-improve** — every involved agent records `## Gotchas` (new pitfalls) and `## Lessons Learned` (what worked/didn't).
+4. **Skill improvement** — every used skill updates its `## Improvement Log`.
+5. **Replace `[NOT YET CONFIGURED]`** — fill in immediately when information is discovered.
+6. **Feature docs** — new features get `docs/features/<name>.md`.
+7. **ADRs** — architectural decisions get `docs/decisions/NNN-title.md`.
 
 ### Self-Improvement Triggers
 
-| Event | Action | Who | Priority |
-|-------|--------|-----|----------|
-| Agent corrected on mistake | **[MUST]** Update `## Gotchas` + `## Lessons Learned` in agent file | The corrected agent | **[MUST]** |
-| Task completed | Update all affected docs, agents, skills | All involved agents | **[MUST]** |
-| Repetitive task (2nd occurrence) | Log in Repetition Log → propose skill | Detecting agent → User | **[MUST]** |
-| Pattern works twice | Promote to convention in CLAUDE.md + docs | Niels | **[SHOULD]** |
-| New tech introduced | Create/update agent + skills for it | User | **[SHOULD]** |
-| User gives feedback | Update conventions, agent behavior, skill procedures | User | **[MUST]** |
-| `[NOT YET CONFIGURED]` encountered | Run bootstrap or ask user | User | **[MUST]** |
-| Agent created | Add to CLAUDE.md agent table | User | **[MUST]** |
-| Skill created | Add to CLAUDE.md skill table | User | **[MUST]** |
-| `/insights` runs | Harvest lessons, detect repetition, promote conventions, tune agents | User | **[SHOULD]** |
+| Event | Action | Priority |
+|-------|--------|----------|
+| Agent corrected on mistake | Update `## Gotchas` + `## Lessons Learned` | [MUST] |
+| Task completed | Update docs, agents, skills | [MUST] |
+| Repetitive task (2nd occurrence) | Log in Repetition Log → propose skill | [MUST] |
+| Pattern works twice | Promote to convention in CLAUDE.md + docs | [SHOULD] |
+| New tech introduced | Create/update agent + skills | [SHOULD] |
+| User gives feedback | Update conventions, agent behavior | [MUST] |
+| `[NOT YET CONFIGURED]` encountered | Run bootstrap or ask user | [MUST] |
+| Sprint completed | Run `skills/sprint-retro.md` | [SHOULD] |
+| `/insights` runs | Harvest lessons, promote conventions, tune | [SHOULD] |
 
 ### Periodic Tuning
 
-Run `skills/insights.md` periodically to keep the system sharp:
-
-```bash
-# During active development (~2-3x per workday)
-/loop 4h /insights
-
-# During maintenance (once a day)
-/loop 8h /insights
-
-# After a sprint or release (thorough one-time run)
-/insights
-```
-
-> Insights needs accumulated data — don't run it too often. A few completed tasks
-> need to have happened for patterns to emerge.
-
-The insights skill scans all agent Repetition Logs, Lessons Learned, and Skill Improvement Logs to:
-- Auto-create skills for detected repetitive patterns
-- Promote confirmed patterns to conventions
-- Tune agent configurations
-- Flag documentation gaps
-
-### Quality Gates
-
-**Before** implementing any feature — **[MUST]** verify:
-1. Is there a feature doc in `docs/features/`? If not, create one first.
-2. Do the architecture docs cover the patterns being used?
-3. Are test patterns documented for this type of code?
-4. Are the right agents identified for this task?
-5. Is the UI approach consistent with documented patterns?
-
-**After** implementing any feature — **[MUST]** verify:
-1. Definition of Done checklist passes (see Quality Framework above)
-2. Were all docs updated? (This is **[MANDATORY]**, check again.)
-3. Were agent gotchas and lessons updated?
-4. Were skill improvements logged?
-5. Does CLAUDE.md reflect the current state?
-6. Did all agents vote? Is consensus reached?
-7. Was technical debt introduced? If yes, is it logged and visible?
+- **After each sprint** → `/sprint-retro` — immediate, focused learning capture
+- **During active development** → `/loop 4h /insights` — periodic system-wide tuning
+- **During maintenance** → `/loop 8h /insights`
+- **After release** → `/insights` — thorough one-time run
