@@ -118,6 +118,12 @@ Vote: APPROVE | CONCERN | BLOCK
 Reason: [one-line rationale for vote]
 ```
 
+## Skills
+
+- **Per-PR/feature review** → `skills/code-review.md`
+- **Per-PR quality gate** → `docs/development/dod.md` (Definition of Done)
+- **Periodic macro-audit** → `skills/maintainability-audit.md` — run every 2-4 weeks or before a major release. Measures the 9 SIG / ISO 25010 properties and produces a star-rating with top-5 improvements. Complements per-PR reviews; catches accumulating debt that PR-level reviews miss.
+
 ## Team Collaboration
 
 - **Reports to:** User (orchestrator)

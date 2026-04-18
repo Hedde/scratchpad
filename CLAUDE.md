@@ -185,11 +185,15 @@ Not every task needs all phases — small bug fixes can start at Build.
 | ADR Create | [skills/adr-create.md](skills/adr-create.md) | Architecture Decision Record |
 | Security Audit | [skills/security-audit.md](skills/security-audit.md) | Security vulnerability check |
 | Sprint Retro | [skills/sprint-retro.md](skills/sprint-retro.md) | Immediate post-sprint learning capture |
+| Maintainability Audit | [skills/maintainability-audit.md](skills/maintainability-audit.md) | Periodic SIG/ISO 25010 macro-audit (Mark) |
 | Insights | [skills/insights.md](skills/insights.md) | Periodic system tuning via `/loop` |
 
 > **To add a new skill:** copy `skills/_template.md`, fill it in, add a row here.
 >
-> **Periodic tuning:** run `/loop 4h /insights` during active development. Run `/sprint-retro` immediately after each completed sprint.
+> **Cadence:**
+> - `/sprint-retro` — immediately after each completed sprint (fresh signal)
+> - `/loop 4h /insights` — during active development (periodic system tuning)
+> - `/loop 336h /maintainability-audit` — every 2 weeks (macro code-quality audit by Mark)
 
 ---
 
