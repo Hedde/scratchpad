@@ -192,8 +192,10 @@ Not every task needs all phases — small bug fixes can start at Build.
 >
 > **Cadence:**
 > - `/sprint-retro` — immediately after each completed sprint (fresh signal)
-> - `/loop 4h /insights` — during active development (periodic system tuning)
+> - `/loop 24h /insights` — daily, during active development (weekly during maintenance)
 > - `/loop 336h /maintainability-audit` — every 2 weeks (macro code-quality audit by Mark)
+>
+> Insights is only useful with accumulated data (several completed tasks). Don't run more than once a day — empty reports waste context.
 
 ---
 
@@ -305,6 +307,6 @@ After EVERY completed task:
 ### Periodic Tuning
 
 - **After each sprint** → `/sprint-retro` — immediate, focused learning capture
-- **During active development** → `/loop 4h /insights` — periodic system-wide tuning
-- **During maintenance** → `/loop 8h /insights`
+- **During active development** → `/loop 24h /insights` — once a day is enough
+- **During maintenance** → `/loop 168h /insights` — weekly
 - **After release** → `/insights` — thorough one-time run

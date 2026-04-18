@@ -57,7 +57,7 @@ Role agents advise and review but never implement. Task agents execute. The user
 - **Voting protocol** — agents vote APPROVE / CONCERN / BLOCK at checkpoints. Sophie and Eva have automatic BLOCK rights on data integrity and critical security issues.
 - **Team assembly patterns** — predefined workflows per task type (feature, bugfix, refactor, security-sensitive, etc.)
 - **Mandatory documentation** — Niels (docs agent) runs after every task. Documentation updates are non-negotiable.
-- **Periodic tuning** — run `/loop 4h /insights` during development to auto-detect repetitive patterns and promote them to conventions.
+- **Periodic tuning** — `/sprint-retro` immediately after each sprint, `/loop 24h /insights` for daily system-wide tuning, `/loop 336h /maintainability-audit` every 2 weeks. Insights needs accumulated lessons to be useful — running it more often than daily produces empty reports.
 
 ## License
 

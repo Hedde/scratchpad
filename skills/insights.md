@@ -1,7 +1,7 @@
 # Skill: Insights — Periodic System Tuning
 
 > **Purpose:** Audit and tune the agent/skill/doc system based on accumulated experience
-> **Used by:** User (via `/loop` — e.g., `/loop 4h /insights`)
+> **Used by:** User (via `/loop` — e.g., `/loop 24h /insights`)
 > **Status:** Active
 > **Created:** 2026-03-16
 > **Last Improved:** 2026-03-16
@@ -173,11 +173,11 @@ Don't just report — fix what you can:
 ## Recommended `/loop` Configuration
 
 ```bash
-# During active development (recommended — ~2-3x per workday)
-/loop 4h /insights
+# During active development (once a day)
+/loop 24h /insights
 
-# During maintenance periods (once a day is fine)
-/loop 8h /insights
+# During maintenance periods (once a week)
+/loop 168h /insights
 
 # After a sprint, release, or onboarding (one-time thorough run)
 /insights
@@ -185,7 +185,9 @@ Don't just report — fix what you can:
 
 > **Why not more frequent?** Insights needs accumulated data to be useful — lessons learned,
 > repetition logs, skill improvement entries. You need several completed tasks before patterns
-> emerge. Running it too often produces empty reports and wastes context.
+> emerge. Anything more frequent than daily produces empty reports and wastes context.
+> For immediate post-sprint reflection, use `/sprint-retro` instead — it's focused on a
+> single just-completed sprint rather than system-wide tuning.
 
 ## Output
 
