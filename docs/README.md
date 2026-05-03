@@ -42,6 +42,25 @@ Documentation updates are **[MANDATORY] after every task**. This is enforced by:
 3. Agent `Gotchas` and `Lessons Learned` sections grow with every correction and task
 4. Skill `Improvement Log` sections grow with every use
 
+## Documentation Map
+
+When working on a task, consult the relevant docs AND the relevant agents/skills.
+
+| When working on... | Consult Docs | Agents | Skills |
+|--------------------|-------------|--------|--------|
+| New project setup | All docs | User (bootstrap) | `bootstrap-interview` |
+| New feature | [Feature Checklist](getting-started/new-feature-checklist.md) | Thomas → Rick + Sanne + reviewers | `implement`, `test-generate` |
+| Database changes | [Database](architecture/database.md), [Migrations](development/migrations.md) | Thomas → Sophie → Rick | `implement` |
+| Architecture decisions | [Decision Records](decisions/) | Thomas + Sophie + Daan | `design-review`, `adr-create` |
+| Writing tests | [Testing](development/testing.md) | Sanne | `test-generate`, `coverage-check` |
+| Code review | [Code Organization](development/code-organization.md) | Mark + Eva + Lisa (fan-out) | `code-review`, `security-audit` |
+| UI work | [UI Patterns](ui/patterns.md) | Lisa → Rick + Lisa review | `implement` |
+| Bug fix | [Testing](development/testing.md) | Karin + Sanne + Mark | `debug`, `test-generate` |
+| Refactoring | [Code Organization](development/code-organization.md) | Thomas → Rick + Mark | `refactor`, `code-review` |
+| Performance | [Code Organization](development/code-organization.md) | Daan → Rick/Karin + Daan verify | `debug`, `implement` |
+| **After ANY task** | **All affected docs** | **Niels [MANDATORY]** | **`doc-update`** |
+| **End of sprint** | — | — | **`sprint-retro`** |
+
 ## Principles
 
 - **Living docs**: Update when patterns change. Delete when obsolete

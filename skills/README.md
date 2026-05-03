@@ -3,25 +3,35 @@
 > Skills are composable, self-improving procedures. They can be invoked by the orchestrator,
 > by agents, or directly. Each skill defines a clear input, process, and output.
 
-## Architecture
+## Catalog
 
-```
-skills/
-  ├── _template.md            # Base template for new skills
-  ├── bootstrap-interview.md  # Project setup & tech stack discovery
-  ├── implement.md            # Feature implementation workflow (Rick)
-  ├── code-review.md          # Structured code review (Mark)
-  ├── design-review.md        # Architecture evaluation (Thomas)
-  ├── test-generate.md        # Test creation & strategy (Sanne)
-  ├── coverage-check.md       # Coverage analysis (Sanne)
-  ├── debug.md                # Systematic debugging (Karin)
-  ├── refactor.md             # Safe refactoring (Rick)
-  ├── doc-update.md           # [MANDATORY] post-task documentation (Niels)
-  ├── doc-audit.md            # Documentation health check (Niels)
-  ├── adr-create.md           # Architecture Decision Record creation (Thomas)
-  ├── security-audit.md       # Security vulnerability check (Eva)
-  └── insights.md             # Periodic system tuning (User via /loop)
-```
+| Skill | File | Purpose |
+|-------|------|---------|
+| Bootstrap | [bootstrap-interview.md](bootstrap-interview.md) | Project setup, tech stack discovery |
+| Implementation | [implement.md](implement.md) | Feature implementation workflow |
+| Code Review | [code-review.md](code-review.md) | Structured code review |
+| Design Review | [design-review.md](design-review.md) | Architecture evaluation |
+| Test Generation | [test-generate.md](test-generate.md) | Test creation & strategy |
+| Coverage Check | [coverage-check.md](coverage-check.md) | Coverage analysis |
+| Debug | [debug.md](debug.md) | Systematic debugging |
+| Refactor | [refactor.md](refactor.md) | Safe refactoring |
+| Doc Update | [doc-update.md](doc-update.md) | **[MANDATORY]** post-task documentation |
+| Doc Audit | [doc-audit.md](doc-audit.md) | Documentation completeness check |
+| ADR Create | [adr-create.md](adr-create.md) | Architecture Decision Record |
+| Security Audit | [security-audit.md](security-audit.md) | Security vulnerability check |
+| Sprint Retro | [sprint-retro.md](sprint-retro.md) | Immediate post-sprint learning capture |
+| Maintainability Audit | [maintainability-audit.md](maintainability-audit.md) | Periodic SIG/ISO 25010 macro-audit (Mark) |
+| Insights | [insights.md](insights.md) | Periodic system tuning via `/loop` |
+| Token Audit | [token-audit.md](token-audit.md) | Audit context overhead (CLAUDE.md, hooks, MCPs, skills) |
+
+## Cadence
+
+- `/sprint-retro` — immediately after each completed sprint (fresh signal)
+- `/loop 24h /insights` — daily during active development; `/loop 168h /insights` during maintenance
+- `/loop 336h /maintainability-audit` — every 2 weeks (macro code-quality audit by Mark)
+- `/token-audit` — monthly, or whenever sessions feel slow / quotas tighten
+
+> Insights is only useful with accumulated data (several completed tasks). Don't run more than once a day — empty reports waste context.
 
 ## How Skills Work
 
