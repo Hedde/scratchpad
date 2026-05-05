@@ -111,11 +111,12 @@ For reusable prompt templates: [agent-briefs/](agent-briefs/README.md) — saves
 Skills are composable procedures invoked by the orchestrator, agents, or user. Full catalog and cadence in [skills/README.md](skills/README.md).
 
 Critical skills:
-- [bootstrap-interview.md](skills/bootstrap-interview.md) — project setup
+- [bootstrap-interview.md](skills/bootstrap-interview.md) — project setup (vult ook `.claude/skills/sig-audit/SKILL.md` met stack/framework-context)
 - [doc-update.md](skills/doc-update.md) — **[MANDATORY]** post-task
 - [token-audit.md](skills/token-audit.md) — context overhead check
 - [insights.md](skills/insights.md) — periodic system tuning
 - [sprint-retro.md](skills/sprint-retro.md) — post-sprint learning capture
+- [.claude/skills/sig-audit/SKILL.md](.claude/skills/sig-audit/SKILL.md) — realistische SIG/TÜViT-stijl maintainability audit. **[MUST]** geconfigureerd door bootstrap met framework-context, kritieke paden en productie-gate bewijs. Audit zonder configuratie = verkeerde scores.
 
 ## Documentation
 

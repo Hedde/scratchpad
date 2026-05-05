@@ -230,7 +230,17 @@ Based on the (discovered or decided) tech stack, update all agent files:
 
 2. **[SHOULD]** Fill in `[NOT YET CONFIGURED]` in every skill's "Project-Specific Notes"
 
-3. **[COULD]** Create stack-specific skills if needed
+3. **[MUST]** Configure `.claude/skills/sig-audit/SKILL.md` → "Project-Specific Configuration":
+   - Stack (taal, framework, persistence, test framework)
+   - Meet-tooling per SIG-property (welk commando levert welk cijfer in dit project)
+   - Framework-mandated patterns (3-param callbacks, DI-fan-in, etc.) — voor context, niet als excuus
+   - Kritieke paden (auth, payments, routing) — Very-High risk units hier triggeren −1 ster cap
+   - Productie-readiness referenties (per gate-item: bewijspad of "ontbreekt")
+   - Eventuele project-specifieke afwijkingen op SIG-drempels (alleen na expliciet user-akkoord)
+
+   **Reden:** sig-audit zonder framework-context produceert verkeerde scores. Bootstrap is het enige moment waarop dit gestructureerd wordt vastgelegd; daarna alleen incrementeel bijwerken.
+
+4. **[COULD]** Create stack-specific skills if needed
 
 ### Step 9: [MUST] Verify Completeness
 
@@ -265,6 +275,7 @@ When updating, hit ALL of these:
 | Skill config | All files in `skills/` → Project-Specific Notes |
 | Path-specific rules | `.claude/rules/` → create rule files per stack layer (models, views, migrations, tests) |
 | Quality hooks | `.claude/settings.json` → configure PostToolUse (formatter) and Stop (format + lint + compile) |
+| SIG audit config | `.claude/skills/sig-audit/SKILL.md` → "Project-Specific Configuration" (stack, meet-tooling, framework-mandated patterns, kritieke paden, productie-gate bewijs) |
 
 ## Output
 
@@ -272,6 +283,7 @@ When updating, hit ALL of these:
 - All docs populated with project-specific information
 - All agents configured for this tech stack
 - All skills configured for this tech stack
+- `.claude/skills/sig-audit/SKILL.md` "Project-Specific Configuration" volledig ingevuld (stack, meet-tooling per property, framework-mandated patterns, kritieke paden, productie-gate bewijs)
 - Path-specific rules created for each layer of the stack
 - Quality hooks configured with project-specific formatter, linter, and compiler commands
 - Zero remaining `[NOT YET CONFIGURED]` markers (that could be filled)
