@@ -26,6 +26,7 @@
 - Bug fix: diagnosis + fix proposal BEFORE scanning the codebase.
 - Planning: start writing as soon as you know enough; mark unknowns as `[OPEN]`.
 - Never >10 file reads without writing something. When in doubt, ask.
+- **[SHOULD]** When picking up a backlog item: ask yourself if plan-review is needed before the feature agent starts — Sophie for schema impact, Daan for scale/perf impact. Refining the plan is cheaper than refining the code. No fixed threshold — decide per item.
 
 ## Session Hygiene
 
