@@ -32,7 +32,7 @@ Package manifests (package.json, Cargo.toml, go.mod, Gemfile, pom.xml, pyproject
 Config files (docker-compose.yml, .env.example, Dockerfile, etc.)
 CI/CD configs (.github/workflows/, .gitlab-ci.yml, etc.)
 Database files (migrations/, schema files, etc.)
-Any file NOT in docs/, agents/, skills/, or CLAUDE.md
+Any file NOT in docs/, agents/, skills/, agent-briefs/, AGENTS.md, CLAUDE.md, or tool adapter directories like .claude/
 ```
 
 **Decision:**
@@ -276,6 +276,7 @@ When updating, hit ALL of these:
 | Path-specific rules | `.claude/rules/` → create rule files per stack layer (models, views, migrations, tests) |
 | Quality hooks | `.claude/settings.json` → configure PostToolUse (formatter) and Stop (format + lint + compile) |
 | SIG audit config | `.claude/skills/sig-audit/SKILL.md` → "Project-Specific Configuration" (stack, meet-tooling, framework-mandated patterns, kritieke paden, productie-gate bewijs) |
+| AI tooling adapters | `AGENTS.md`, `docs/development/ai-tooling.md` → update only when adapter behavior or runtime conventions change |
 
 ## Output
 
@@ -284,6 +285,7 @@ When updating, hit ALL of these:
 - All agents configured for this tech stack
 - All skills configured for this tech stack
 - `.claude/skills/sig-audit/SKILL.md` "Project-Specific Configuration" volledig ingevuld (stack, meet-tooling per property, framework-mandated patterns, kritieke paden, productie-gate bewijs)
+- `AGENTS.md` still points to the same blueprint and Codex-specific conventions remain adapter-only
 - Path-specific rules created for each layer of the stack
 - Quality hooks configured with project-specific formatter, linter, and compiler commands
 - Zero remaining `[NOT YET CONFIGURED]` markers (that could be filled)
@@ -305,3 +307,4 @@ When updating, hit ALL of these:
 ## Improvement Log
 
 - 2026-04-07: Added coding standards detection from config files (inspired by /init), added workflow pattern discovery step, added explicit agent configuration per-name, added RFC keywords throughout
+- 2026-05-07: Added Codex adapter awareness (`AGENTS.md`) and clarified that bootstrap detection must ignore shared AI template/adaptor files so new projects are not misclassified as existing codebases.

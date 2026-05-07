@@ -21,6 +21,8 @@
 
 ## Agent Files
 
+These files are the shared project persona catalog. They are intentionally tool-neutral. Claude prompts can use them directly; Codex uses them as local guidance or prompt context when explicit delegated agent work is requested.
+
 ```
 agents/
 ├── _template.md              # Base template for new agents
@@ -37,6 +39,10 @@ agents/
 ```
 
 ## How to Spawn Agents
+
+The examples below describe the project-level orchestration model. Translate them to the runtime you are using.
+
+For Codex specifically, do not treat filenames as `subagent_type` values. Codex currently exposes runtime roles such as `explorer` and `worker`; map the persona onto the nearest role and include the relevant persona guidance in the prompt.
 
 ```python
 # Single agent

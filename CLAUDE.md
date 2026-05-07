@@ -1,6 +1,6 @@
 # Project Blueprint — Orchestrator Trigger File
 
-> Routes every task to the right agents, skills, and docs. Self-improving: update after every completed task. Deep knowledge lives in `docs/`, agents in `agents/`, skills in `skills/`.
+> Routes every task to the right agents, skills, and docs. Self-improving: update after every completed task. Deep knowledge lives in `docs/`, agents in `agents/`, skills in `skills/`. Codex enters through `AGENTS.md`, which is a thin adapter back to this blueprint.
 >
 > RFC 2119 keywords: **[MUST]** = mandatory, **[SHOULD]** = recommended unless justified, **[COULD]** = optional, **[MUST NOT]** = prohibited.
 
@@ -66,6 +66,16 @@ Git: conventional commits (`feat:`, `fix:`, `chore:`, `refactor:`, `test:`, `doc
 
 `.claude/rules/*.md` files load automatically when editing files matching their glob frontmatter — more efficient than inlining everything here. Bootstrap creates one rule file per stack layer (models, views, migrations, tests). See `.claude/rules/_template.md`.
 
+## AI Tooling Adapters
+
+`CLAUDE.md` is the canonical project blueprint. Tool-specific integration stays thin:
+
+- `AGENTS.md` — Codex adapter and agent/runtime mapping.
+- `.claude/` — Claude Code rules, settings, and native skill wrappers.
+- `agents/`, `skills/`, `agent-briefs/`, and `docs/` — shared across tools.
+
+See [docs/development/ai-tooling.md](docs/development/ai-tooling.md). Do not duplicate the persona catalog into `.agents/`; repo-root `.agents/` is reserved for Codex plugin metadata only.
+
 ## Quality Hooks
 
 `.claude/settings.json` holds automated quality gates (PostToolUse formatter, Stop quality checks). Empty until bootstrap fills them in. **Alternative:** use a git pre-commit hook instead of a Stop hook — keeps quality checks out of Claude's context and only runs at commit time.
@@ -94,6 +104,8 @@ Named specialists work in **teams**. Role agents advise/review; task agents plan
 | **Niels** | [docs-sync.md](agents/docs-sync.md) | Task | Documentation sync (automatic) |
 
 **Development lifecycle:** Plan → Build → Verify → Review → Ship. Not every task needs all phases (small bug fixes can start at Build).
+
+For Codex: these markdown files define project personas, not registered Codex subagent types. Codex uses them as local guidance or prompt context when the user explicitly asks for delegated/parallel agent work.
 
 | Phase | Who | Quality gate |
 |-------|-----|--------------|

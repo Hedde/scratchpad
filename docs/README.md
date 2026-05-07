@@ -5,33 +5,34 @@ Living documentation that grows with the project. Part of a self-improving syste
 ## System Architecture
 
 ```
-CLAUDE.md                     # Orchestrator trigger file — entry point for all tasks
-  │
-  ├── agents/                 # Named specialist personas (Role + Task agents)
-  │   ├── ux-designer.md      # Lisa — UI patterns, accessibility, responsive design
-  │   ├── qa-lead.md          # Mark — Production readiness, quality dimensions
-  │   ├── performance-engineer.md  # Daan — Runtime performance at scale
-  │   ├── database-specialist.md   # Sophie — Schema, migrations, data integrity
-  │   ├── security-engineer.md     # Eva — OWASP, access control, threat modeling
-  │   ├── plan.md             # Thomas — Implementation planning (zero code)
-  │   ├── feature.md          # Rick — Full-stack implementation
-  │   ├── fix.md              # Karin — Root cause analysis, bug fixes
-  │   ├── test.md             # Sanne — Test strategy, coverage improvement
-  │   └── docs-sync.md        # Niels — Documentation sync (automatic)
-  │
-  ├── skills/                 # Composable procedures used by agents
-  │   ├── bootstrap-interview.md, implement.md, code-review.md, ...
-  │   └── doc-update.md       # [MANDATORY] post-task skill — triggered by Niels
-  │
-  └── docs/                   # Project knowledge base (this folder)
-      ├── architecture/       # System design, database patterns
-      ├── decisions/          # Architecture Decision Records (ADRs)
-      ├── development/        # Workflow, code patterns, testing, migrations
-      ├── features/           # Functional documentation per feature
-      ├── getting-started/    # Onboarding, checklists
-      ├── operations/         # Deployment, CI/CD
-      └── ui/                 # Frontend patterns
+CLAUDE.md                     # Canonical project blueprint and Claude Code entry point
+AGENTS.md                     # Thin Codex adapter; points back to CLAUDE.md
+.claude/                      # Claude-native rules, settings, and skill wrappers
+agents/                       # Named specialist personas (Role + Task agents)
+  ├── ux-designer.md          # Lisa — UI patterns, accessibility, responsive design
+  ├── qa-lead.md              # Mark — Production readiness, quality dimensions
+  ├── performance-engineer.md # Daan — Runtime performance at scale
+  ├── database-specialist.md  # Sophie — Schema, migrations, data integrity
+  ├── security-engineer.md    # Eva — OWASP, access control, threat modeling
+  ├── plan.md                 # Thomas — Implementation planning (zero code)
+  ├── feature.md              # Rick — Full-stack implementation
+  ├── fix.md                  # Karin — Root cause analysis, bug fixes
+  ├── test.md                 # Sanne — Test strategy, coverage improvement
+  └── docs-sync.md            # Niels — Documentation sync (automatic)
+skills/                       # Composable procedures used by agents
+  ├── bootstrap-interview.md, implement.md, code-review.md, ...
+  └── doc-update.md           # [MANDATORY] post-task skill — triggered by Niels
+docs/                         # Project knowledge base (this folder)
+  ├── architecture/           # System design, database patterns
+  ├── decisions/              # Architecture Decision Records (ADRs)
+  ├── development/            # Workflow, code patterns, testing, migrations
+  ├── features/               # Functional documentation per feature
+  ├── getting-started/        # Onboarding, checklists
+  ├── operations/             # Deployment, CI/CD
+  └── ui/                     # Frontend patterns
 ```
+
+Tool-specific details live in [development/ai-tooling.md](development/ai-tooling.md). Keep adapters thin so Claude, Codex, and future runtimes do not drift apart.
 
 ## How Documentation Evolves
 

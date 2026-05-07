@@ -1,10 +1,10 @@
-# Claude Code Orchestrator
+# AI Quality Bootstrap
 
-A project scaffolding template that extends Claude Code beyond what `/init` provides. Where `/init` generates a static `CLAUDE.md` with project conventions, this template adds a **self-improving agent team**, **composable skills**, and **structured collaboration protocols** that evolve with your project.
+A project scaffolding template for starting projects from a quality approach instead of ad-hoc prompting. It gives Claude Code and Codex the same shared blueprint: a **self-improving agent team**, **composable skills**, and **structured collaboration protocols** that evolve with your project.
 
 ## Why not just `/init`?
 
-`/init` is a great starting point: it scans your codebase and produces a single `CLAUDE.md` with conventions, commands, and structure. But it stops there. It gives you a snapshot, not a system.
+`/init` is a great starting point: it scans your codebase and produces a single tool-specific instruction file with conventions, commands, and structure. But it stops there. It gives you a snapshot, not a system.
 
 This template adds three layers on top:
 
@@ -34,11 +34,16 @@ For small scripts or one-off tasks, `/init` is sufficient.
 ## Structure
 
 ```
-CLAUDE.md                 # Orchestrator — routes tasks to agents, skills, and docs
-agents/                   # Named specialist agents (see agents/README.md)
-skills/                   # Composable procedures (see skills/README.md)
+CLAUDE.md                 # Canonical project blueprint and Claude Code entry point
+AGENTS.md                 # Thin Codex adapter; points back to the same blueprint
+.claude/                  # Claude-native rules, settings, and native skill wrappers
+agents/                   # Cross-tool named specialist personas (see agents/README.md)
+skills/                   # Cross-tool composable procedures (see skills/README.md)
+agent-briefs/             # Reusable prompt templates
 docs/                     # Living project documentation (see docs/README.md)
 ```
+
+See [docs/development/ai-tooling.md](docs/development/ai-tooling.md) for the no-drift adapter rules, including when repo-root `.agents/` is valid for Codex plugin metadata.
 
 ## The team
 

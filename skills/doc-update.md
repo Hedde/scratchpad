@@ -37,6 +37,7 @@ Based on the completed task, determine which docs need updating:
 | Skill procedure | `skills/<name>.md` Improvement Log |
 | New agent created | `CLAUDE.md` Agent table, `agents/README.md` |
 | New skill created | `CLAUDE.md` Skill table, `skills/README.md` |
+| AI runtime or adapter behavior | `AGENTS.md`, `.claude/`, `docs/development/ai-tooling.md` |
 
 ### Step 2: Update Each Affected Doc
 For each identified doc:
@@ -51,6 +52,8 @@ For each identified doc:
 2. Check if the documentation map needs new entries
 3. Check if convention summaries need updating
 4. Verify the agent and skill tables are current
+
+If the change affects Codex or another AI runtime, update only the thin adapter (`AGENTS.md` or `.claude/`) and keep durable policy in `CLAUDE.md` / `docs/`.
 
 ### Step 4: Update Agent Lessons Learned
 For every agent that was involved in the task:
@@ -73,6 +76,7 @@ Grep all docs for `[NOT YET CONFIGURED]` — fill in any that can be resolved.
 - Agent lessons recorded
 - Skill improvements logged
 - `CLAUDE.md` current
+- Tool adapters current when runtime behavior changed
 - Zero resolvable `[NOT YET CONFIGURED]` markers remaining
 
 ## Project-Specific Notes
@@ -85,9 +89,10 @@ Grep all docs for `[NOT YET CONFIGURED]` — fill in any that can be resolved.
 - [ ] `CLAUDE.md` is current
 - [ ] Agent lessons are recorded
 - [ ] Skill improvements are logged
+- [ ] Tool adapters updated only when runtime behavior changed
 - [ ] No resolvable `[NOT YET CONFIGURED]` markers remain
 - [ ] No stale or obsolete information left in docs
 
 ## Improvement Log
 
-[No entries yet — this log grows with use]
+- 2026-05-07: Added AI runtime adapter update targets so Codex/Claude integration changes update `AGENTS.md`, `.claude/`, and `docs/development/ai-tooling.md` without duplicating durable policy.
