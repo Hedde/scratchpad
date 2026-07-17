@@ -1,6 +1,6 @@
 # Feature: trigger-tree
 
-> **Status:** Complete (plugin v0.1.0)
+> **Status:** Complete (plugin v0.3.6 — macOS/Linux/Windows)
 > **Created:** 2026-07-17
 
 ## Purpose
@@ -28,10 +28,13 @@ resultaat, geen tussenstappen):
 3. `/tt status` — compact snapshot in de chat.
 4. `/tt watch [demo|replay]` — opent het live ASCII pulse-dashboard in een nieuw
    Terminal-venster (heat-tree; reads flitsen wit en rippelen omhoog door parent-folders).
-5. `/tt insights` — kort rapport in de chat (dode paden in 3 categorieën, hunting,
-   max 3 routervoorstellen) + link naar een volledig HTML-rapport (Artifact of
-   `.trigger-tree/report.html`).
-6. `/tt help` — commando-overzicht.
+5. `/tt insights` — health grade (A–F), folder heat/cold map, untouched-analyse met
+   router-gap-detectie + link naar een volledig HTML-rapport.
+6. `/tt suggestions` — max 5 bewijs-onderbouwde routerfixes, toepassen na bevestiging.
+7. `/tt note <tekst>` — routerwijziging markeren; effect zichtbaar in de trend.
+8. `/tt setup` — project-wiring (gitignore, statusline, config-override).
+9. `/tt help` — commando-overzicht. Op macOS opent `/tt watch` een iTerm2-split naast
+   de aanroepende sessie (multi-sessie-veilig via ITERM_SESSION_ID).
 
 ## Technical Design
 
@@ -50,14 +53,15 @@ Layout van de plugin-repo:
 |-----------|---------------|
 | `.claude-plugin/plugin.json` | Manifest; plugin heet `tt` |
 | `SKILL.md` (plugin-root) | Root-skill → kaal `/tt`-commando met subcommand-dispatch |
-| `hooks/hooks.json` | SessionStart / UserPromptSubmit / PostToolUse(Read\|Glob\|Grep) → `tt-log.sh` |
+| `hooks/hooks.json` | SessionStart / UserPromptSubmit / PostToolUse(Read\|Glob\|Grep + Skill) → `tt-log.py` |
 | `scripts/tt-config.sh` | Default-config (watch/scan/always-loaded regexes) |
-| `scripts/tt-log.sh` | Logger; filtert non-doc paden, append JSONL |
+| `scripts/tt-log.py` | Logger (python3-only); filtert non-doc paden, prompt-privacy, log-rotatie |
 | `scripts/tt-stats.py` | Deterministische aggregator → stats-JSON |
 | `scripts/tt-report.py` | Stats → self-contained HTML-rapport |
 | `scripts/tt-watch.py` | Live terminal-dashboard (tail, `--demo`, `--replay`) |
-| `scripts/tt-open.sh` | Opent tt-watch in nieuw Terminal-venster (osascript) |
-| `scripts/tt-statusline.sh` | Statusline-script (kopie; registratie blijft project-setting) |
+| `scripts/tt-open.sh` | Opent tt-watch in iTerm2-split/tmux/Terminal/wt.exe (sessie-getarget) |
+| `scripts/tt-statusline.py` | Statusline-script (kopie; registratie blijft project-setting) |
+| `scripts/tt-setup.py` | Idempotente project-wiring |
 
 De plugin-repo is zijn eigen marketplace (`/plugin marketplace add Hedde/trigger_tree`
 → `/plugin install trigger-tree@trigger-tree`; het commando blijft `/tt`); lokaal testen kan met
@@ -114,18 +118,15 @@ taaktype-patronen.
 
 - **Rationale:** plugin-`settings.json` ondersteunt alleen `agent` en
   `subagentStatusLine`. Het script ship met de plugin; registratie gebeurt per project
-  (hier: `.claude/settings.json` → `scripts/tt-statusline.sh`, `refreshInterval: 5`).
+  (hier: `.claude/settings.json` → `scripts/tt-statusline.py`, `refreshInterval: 5`).
 
 ## Open Questions
 
-- [ ] Skill-tool-invocaties loggen (PostToolUse matcher `Skill`) zodat ook
-      SKILL.md-gebruik meetbaar wordt in plaats van `always_loaded`.
-- [ ] Codex-adapter: Codex heeft geen hook-systeem; kan een wrapper in dezelfde
-      history.jsonl bijschrijven?
-- [ ] Drempelwaarden voor "dood" (nu: 0 reads over hele meetperiode) — kalibreren na
-      eerste echte `/tt insights`-run.
-- [ ] Marketplace naar GitHub + `extraKnownMarketplaces`/`enabledPlugins` in
-      `.claude/settings.json` zodat teamgenoten een installatie-prompt krijgen.
+- [x] Skill-tool-invocaties loggen — sinds v0.2.0 (PostToolUse op `Skill`).
+- [x] Marketplace op GitHub + auto-install prompt via settings — sinds v0.2.x.
+- [ ] Codex-adapter: wrapper die in dezelfde history.jsonl bijschrijft (backlog).
+- [ ] Drempelwaarden maturity-model kalibreren na eerste `mature` meetperiode.
+- [ ] Indiening community-marketplace (formulier, ligt bij Hedde).
 
 ## Testing Notes
 
