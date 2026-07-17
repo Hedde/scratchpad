@@ -1,0 +1,4 @@
+# Trigger Tree telemetry — local per-machine data, never committed.
+# The optional per-project config override IS committed.
+.trigger-tree/*
+!.trigger-tree/config.sh

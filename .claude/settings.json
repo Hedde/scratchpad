@@ -1,3 +1,19 @@
 {
-  "hooks": {}
+  "extraKnownMarketplaces": {
+    "trigger-tree": {
+      "source": {
+        "source": "github",
+        "repo": "Hedde/trigger_tree"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "tt@trigger-tree": true
+  },
+  "hooks": {},
+  "statusLine": {
+    "type": "command",
+    "command": "python3 \"$CLAUDE_PROJECT_DIR\"/scripts/tt-statusline.py",
+    "refreshInterval": 5
+  }
 }

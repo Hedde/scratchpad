@@ -23,6 +23,7 @@
 | Maintainability Audit | [maintainability-audit.md](maintainability-audit.md) | Periodic SIG/ISO 25010 macro-audit (Mark) |
 | Insights | [insights.md](insights.md) | Periodic system tuning via `/loop` |
 | Token Audit | [token-audit.md](token-audit.md) | Audit context overhead (CLAUDE.md, hooks, MCPs, skills) |
+| Trigger Tree | [github.com/Hedde/trigger_tree](https://github.com/Hedde/trigger_tree) | `/tt status\|watch\|insights\|help` — doc-telemetrie, untouched/dead paden, router aanscherpen |
 
 ## Cadence
 
@@ -30,6 +31,7 @@
 - `/loop 24h /insights` — daily during active development; `/loop 168h /insights` during maintenance
 - `/loop 336h /maintainability-audit` — every 2 weeks (macro code-quality audit by Mark)
 - `/token-audit` — monthly, or whenever sessions feel slow / quotas tighten
+- `/tt insights` — wekelijks tijdens actieve ontwikkeling; vereist ~30 read-events / 3 sessies aan telemetrie
 
 > Insights is only useful with accumulated data (several completed tasks). Don't run more than once a day — empty reports waste context.
 

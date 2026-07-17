@@ -78,7 +78,7 @@ See [docs/development/ai-tooling.md](docs/development/ai-tooling.md). Do not dup
 
 ## Quality Hooks
 
-`.claude/settings.json` holds automated quality gates (PostToolUse formatter, Stop quality checks). Empty until bootstrap fills them in. **Alternative:** use a git pre-commit hook instead of a Stop hook — keeps quality checks out of Claude's context and only runs at commit time.
+`.claude/settings.json` holds automated quality gates (PostToolUse formatter, Stop quality checks) plus the Trigger Tree statusline. The telemetry hooks themselves ship with the external `tt` plugin ([github.com/Hedde/trigger_tree](https://github.com/Hedde/trigger_tree) — log every doc read to `.trigger-tree/history.jsonl`, zero tokens); `extraKnownMarketplaces` + `enabledPlugins` in settings prompt teammates to install it. Quality gates empty until bootstrap fills them in. **Alternative:** use a git pre-commit hook instead of a Stop hook — keeps quality checks out of Claude's context and only runs at commit time.
 
 ## Architecture / Deployment / CI/CD / Domain Concepts
 
@@ -129,6 +129,7 @@ Critical skills:
 - [token-audit.md](skills/token-audit.md) — context overhead check
 - [insights.md](skills/insights.md) — periodic system tuning
 - [sprint-retro.md](skills/sprint-retro.md) — post-sprint learning capture
+- `tt` plugin ([github.com/Hedde/trigger_tree](https://github.com/Hedde/trigger_tree)) — `/tt status|watch|insights|help`: doc-telemetrie, untouched/dead paden, router aanscherpen. Zie [docs/features/trigger-tree.md](docs/features/trigger-tree.md).
 - [.claude/skills/sig-audit/SKILL.md](.claude/skills/sig-audit/SKILL.md) — realistische SIG/TÜViT-stijl maintainability audit. **[MUST]** geconfigureerd door bootstrap met framework-context, kritieke paden en productie-gate bewijs. Audit zonder configuratie = verkeerde scores.
 
 ## Documentation
