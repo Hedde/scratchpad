@@ -8,7 +8,7 @@
     }
   },
   "enabledPlugins": {
-    "tt@trigger-tree": true
+    "trigger-tree@trigger-tree": true
   },
   "hooks": {},
   "statusLine": {

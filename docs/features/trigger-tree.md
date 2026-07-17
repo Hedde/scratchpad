@@ -60,7 +60,7 @@ Layout van de plugin-repo:
 | `scripts/tt-statusline.sh` | Statusline-script (kopie; registratie blijft project-setting) |
 
 De plugin-repo is zijn eigen marketplace (`/plugin marketplace add Hedde/trigger_tree`
-→ `/plugin install tt@trigger-tree`); lokaal testen kan met
+→ `/plugin install trigger-tree@trigger-tree`; het commando blijft `/tt`); lokaal testen kan met
 `claude --plugin-dir ../trigger_tree`. Per-project override van de config:
 `.trigger-tree/config.sh` (gecommit; de rest van `.trigger-tree/` is gitignored).
 
