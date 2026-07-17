@@ -1,4 +1,4 @@
-# Feature: Trigger Tree
+# Feature: trigger-tree
 
 > **Status:** Complete (plugin v0.1.0)
 > **Created:** 2026-07-17
@@ -13,7 +13,7 @@ daadwerkelijk geraadpleegd, welke paden zijn dood, en waar zoekt het model in pl
 van gerouteerd te worden?
 
 Bewuste designkeuze: de discovery zelf blijft model-driven (CLAUDE.md → docs/README.md
-→ index-instructies). Trigger Tree **meet** die discovery deterministisch en scherpt de
+→ index-instructies). trigger-tree **meet** die discovery deterministisch en scherpt de
 router datagedreven aan — het is géén tweede routeringsmechanisme.
 
 ## User Flow
